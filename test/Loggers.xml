@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<Log>
+	<Logger name="LogMain" description="Логирование всех устройств" console="on"> 
+<!--
+  <Logger name="LogMain" description="Логирование всех устройств" console="on"> 
+   -->
+<!--
+  <Logger name="LogMain" description="Логирование всех устройств" console="off"> 
+   -->
+
+	</Logger>
+	<Servers>
+		<server name="OPUL01" description="Левый Щит канал 1" 
+				port="5511" 
+				path="c:/temp/"> 
+		</server>
+		<server name="OPUL02" description="Левый Щит канал 2" 
+				port="5511" 
+				path="c:/temp/"> 
+		</server>
+	</Servers>
+  </Log>
