@@ -24,11 +24,7 @@ namespace inout
             lastOperation = DateTime.MinValue;
             typeDriver = "APAX";
             //inque = new ConcurrentQueue<ApaxRegisterWithValue>();
-            base.MakeAllArrays();
-            
-            for (int i = 0; i < varBuffer.Length; i++)            {
-                varBuffer[i] = true;
-            }
+            base.MakeAllArrays();            
         }
         public override void Init(int step, int timeout)
         {
