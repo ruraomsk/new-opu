@@ -19,7 +19,8 @@ namespace Function
         }
         static public double ReadAsDouble(string value)
         {
-            string[] result = value.Split('.');
+            char[] delimiterChars = { '.', ',' };
+            string[] result = value.Split(delimiterChars);
             if(result.Length==1) return double.Parse(result[0]+",0");
             return double.Parse(result[0]+","+result[1]);
         }
