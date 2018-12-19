@@ -44,12 +44,15 @@
     <Compile Include="ADD.cs" />
     <Compile Include="AND.cs" />
     <Compile Include="BLINK.cs" />
+    <Compile Include="BLINKS.cs" />
     <Compile Include="BLK.cs" />
     <Compile Include="DATATIME.cs" />
     <Compile Include="DIV.cs" />
+    <Compile Include="EQ.cs" />
     <Compile Include="FloatLong.cs" />
     <Compile Include="FloatStr.cs" />
     <Compile Include="FORIF.cs" />
+    <Compile Include="FORMAX.cs" />
     <Compile Include="Funct.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="IFGT.cs" />
@@ -57,6 +60,7 @@
     <Compile Include="IntStr.cs" />
     <Compile Include="LIVE.cs" />
     <Compile Include="Not.cs" />
+    <Compile Include="NOTAND.cs" />
     <Compile Include="OR.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SET.cs" />

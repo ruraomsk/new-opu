@@ -17,7 +17,9 @@ namespace Function
             new DATATIME(),
             //new intCONV(),
             //new boolCONV(),
-            //new FORMAX(),
+
+            new FORMAX(),
+
             //new FORMAT() ,
             new FORIF(),
             new BLINK(),
@@ -27,18 +29,24 @@ namespace Function
             new DIV(),
             new ADD(),
             new BLK(),
-            //new EQ(),
+
+            new EQ(),
+
             new LIVE(),
             new STATUS(),
             new KEY(),
             //new Mul(),
             new FloatLong(),
-            //new NOTAND(),
+
+            new NOTAND(),
+
             new IFLT(),
             new IFGT(),
             new BLINKGT(),
             new BLINKLT(),
-//            new BLINKS(),
+
+            new BLINKS(),
+            
             new Not()
         };
 
