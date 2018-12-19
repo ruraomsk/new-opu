@@ -26,6 +26,12 @@ namespace inout
             vars = new Dictionary<string, Variable>();
             LoadingError = false;
         }
+
+        public bool GetLoadingError() {
+            return LoadingError;
+        }
+
+
         public void StartAllDevices()
         {
             foreach (Driver drv in drvs.Values)

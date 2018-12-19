@@ -32,8 +32,19 @@ namespace OPU
             Console.Write(".");
             XMLBlinds.Load(path, server);
             Console.Write(".");
+
+            if (server.GetLoadingError())
+            {
+                Console.Write("\nЕсть ошибки при загрузке функций!\nПрограмма завершена аварийна");
+                return;
+
+            }
+
+
             AgServer agserv = new AgServer(server, 8081);
             Console.Write(".");
+
+
             server.StartAllDevices();
             Console.Write(".");
             Console.WriteLine("\nAll done.");
