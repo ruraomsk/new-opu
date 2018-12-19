@@ -16,7 +16,12 @@ namespace Function
 
         public override string calculate(List<string> values)
         {
-            return null;
+            bool result = bool.Parse(values[0]);
+            foreach (string val in values.Skip(1)) {
+                bool b = bool.Parse(val);
+                result = !(result & b);
+            }
+            return result.ToString();
         }
     }
 }
