@@ -8,7 +8,6 @@ namespace inout
 {
     public class ApaxOutputDiscret : ApaxCommon
     {
-        private DateTime lastOperation = DateTime.MinValue;
         private long stepTime;
         private int timeout;
         private Thread drvThr;

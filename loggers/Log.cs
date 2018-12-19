@@ -25,8 +25,7 @@ namespace loggers
         {
             lock (mutex)
             {
-                string plainMessage = message.Replace("\"","\'");
-                Messages.Add(DateTime.Now.ToLongTimeString() + " - " + module + ": " + message);
+                Messages.Add(DateTime.Now.ToLongTimeString() + " - " + module + ": " + message.Replace("\"", "\'"));
                 if (Messages.Count > 200) Messages.RemoveAt(0);
             }
         }
