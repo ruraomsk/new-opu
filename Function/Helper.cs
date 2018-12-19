@@ -9,17 +9,18 @@ namespace Function
     static public class Helper
     {
         static public int live = 0;
+        static char[] delimiterChars = { '.', ',' };
+
 
         static public bool blink=false;
 
         static public int ReadAsInt(string value)
         {
-            string[] result = value.Split('.');
+            string[] result = value.Split(delimiterChars);
             return int.Parse(result[0]);
         }
         static public double ReadAsDouble(string value)
         {
-            char[] delimiterChars = { '.', ',' };
             string[] result = value.Split(delimiterChars);
             if(result.Length==1) return double.Parse(result[0]+",0");
             return double.Parse(result[0]+","+result[1]);
