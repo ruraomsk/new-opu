@@ -13,8 +13,13 @@ namespace Function
 
         public override string calculate(List<string> values)
         {
+            int a = int.Parse(values[0]);
+            int b = int.Parse(values[1]);
 
-            return null;
+            int result = ((a | b) & 9) | ((a & b) & 20);
+
+
+            return result.ToString();
         }
     }
 }
