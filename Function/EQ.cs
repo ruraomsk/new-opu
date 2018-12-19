@@ -16,7 +16,8 @@ namespace Function
 
         public override string calculate(List<string> values)
         {
-            throw new NotImplementedException();
+            bool result = ( values[0].Equals(values[1]) ) ? true : false;
+            return result.ToString();
         }
     }
 }
