@@ -16,7 +16,16 @@ namespace Function
 
         public override string calculate(List<string> values)
         {
-            return null;
+            float maxValue = float.Parse(values[0]);
+
+            foreach ( string val in values.Skip(1) ) {
+                float current = float.Parse(val);
+                if ( current > maxValue ) {
+                    maxValue = current;
+                }
+            }
+
+            return maxValue.ToString() ;
         }
     }
 }
