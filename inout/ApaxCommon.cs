@@ -15,11 +15,37 @@ namespace inout
         protected AdamControl adamCtrl;
         protected int[] slots;
         protected string[] nameDevices;
+
+        protected DateTime lastOperation;
+
         protected void MakeAllArrays()
         {
             varBuffer = new bool[Util.MaxDevice * Util.MaxChanal];
             buffer = new bool[Util.MaxDevice * Util.MaxChanal];
         }
+
+        public ApaxCommon(string name, string description, Dictionary<string, ApaxRegister> regsApax) {
+            // input:
+            this.name = name;
+            this.description = description;
+            this.regsApax = regsApax;
+            lastOperation = DateTime.MinValue;
+            typeDriver = "APAX";
+            //inque = new ConcurrentQueue<ApaxRegisterWithValue>();
+            MakeAllArrays();
+
+            /*
+                         this.name = name;
+            this.description = description;
+            this.regsApax = regsApax;
+            lastOperation = DateTime.MinValue;
+            typeDriver = "APAX";
+            //inque = new ConcurrentQueue<ApaxRegisterWithValue>();
+            base.MakeAllArrays();
+
+             */
+        }
+
         public override string GetDescription(string nameValue)
         {
             ApaxRegister reg;

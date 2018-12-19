@@ -15,20 +15,14 @@ namespace inout
         //private ConcurrentQueue<ApaxRegisterWithValue> inque;
         private const string ClassName = "ApaxOutputDiscret";
 
-        public ApaxOutputDiscret(string name, string description, Dictionary<string, ApaxRegister> regsApax)
+        public ApaxOutputDiscret(string name, string description, Dictionary<string, ApaxRegister> regsApax):
+            base(name, description, regsApax)
         {
-            this.name = name;
-            this.description = description;
-            this.regsApax = regsApax;
-            lastOperation = DateTime.MinValue;
-            typeDriver = "APAX";
-            //inque = new ConcurrentQueue<ApaxRegisterWithValue>();
-            base.MakeAllArrays();
-
             for (int i = 0; i < varBuffer.Length; i++) {
                 varBuffer[i] = true;
             }
         }
+
         public override void Init(int step, int timeout)
         {
             this.timeout = timeout;

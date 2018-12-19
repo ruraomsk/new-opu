@@ -8,7 +8,7 @@ namespace inout
 {
     public class ApaxInputDiscret : ApaxCommon
     {
-        private DateTime lastOperation = DateTime.MinValue;
+//        private DateTime lastOperation = DateTime.MinValue;
         private long stepTime;
         private int timeout;
         private Thread drvThr;
@@ -17,14 +17,8 @@ namespace inout
 
 
         public ApaxInputDiscret(string name, string description, Dictionary<string, ApaxRegister> regsApax)
+            :base(name, description, regsApax)
         {
-            this.name = name;
-            this.description = description;
-            this.regsApax = regsApax;
-            lastOperation = DateTime.MinValue;
-            typeDriver = "APAX";
-            //inque = new ConcurrentQueue<ApaxRegisterWithValue>();
-            base.MakeAllArrays();            
         }
         public override void Init(int step, int timeout)
         {
