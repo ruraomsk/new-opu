@@ -16,9 +16,14 @@ namespace Function
 
         public override string calculate(List<string> values)
         {
-            int b = int.Parse(values[0]);
-            if (bool.Parse(values[1])) b += int.Parse(values[2]);
-            return b.ToString();
+            if (bool.Parse(values[1])) {
+                int sum = int.Parse( values[0] );
+                foreach (string val in values) {
+                    sum += int.Parse(val);
+                }
+                return sum.ToString();
+            }
+            return values[0];
         }
     }
 }

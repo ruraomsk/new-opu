@@ -26,7 +26,7 @@ namespace Function
             new IntStr(),
             new DIV(),
             new ADD(),
-            //new BLK(),
+            new BLK(),
             //new EQ(),
             new LIVE(),
             new STATUS(),
@@ -38,7 +38,7 @@ namespace Function
             new IFGT(),
             new BLINKGT(),
             new BLINKLT(),
-            //new BLINKS(),
+//            new BLINKS(),
             new Not()
         };
 
