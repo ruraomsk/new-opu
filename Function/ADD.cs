@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Function
 {
@@ -18,7 +15,8 @@ namespace Function
         {
             if (bool.Parse(values[1])) {
                 int sum = int.Parse( values[0] );
-                foreach (string val in values) {
+
+                foreach (string val in values.Skip(2)) {
                     sum += int.Parse(val);
                 }
                 return sum.ToString();

@@ -21,7 +21,7 @@ namespace OPU
                 Console.WriteLine("Error parametrs:\nusage OPU path_xml_file");
             }
             string path = args[0];
-            Console.Write("Loadin from " + path + " ");
+            Console.Write("Loading from " + path + " ");
             ServerOPU server = XMLServer.Load(path);
             Console.Write(".");
             Reconnect.StartReconnect(server.stepReconnect);

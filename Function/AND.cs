@@ -43,7 +43,9 @@ namespace Function
                     res = int.Parse(s);
                     b = false;
                 }
-                res = res & int.Parse(s);
+                else {
+                    res = res & int.Parse(s);
+                }
             }
             return res.ToString();
         }

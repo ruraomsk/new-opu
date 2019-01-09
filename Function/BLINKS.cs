@@ -19,7 +19,7 @@ namespace Function
             int result = ((a | b) & 9) | ((a & b) & 20);
 
 
-            return result.ToString();
+             return result.ToString();
         }
     }
 }
