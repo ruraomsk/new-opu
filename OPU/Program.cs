@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using builder;
 using inout;
 using loggers;
@@ -37,20 +34,17 @@ namespace OPU
             {
                 Console.Write("\nЕсть ошибки при загрузке функций!\nПрограмма завершена аварийна");
                 return;
-
             }
-
 
             AgServer agserv = new AgServer(server, 8081);
             Console.Write(".");
-
 
             server.StartAllDevices();
             Console.Write(".");
             Console.WriteLine("\nAll done.");
             Console.WriteLine("Awaing 5 seconds for looking lamp.");
             Thread.Sleep(5000);
-            Console.WriteLine("Server {0} as {1} started...",server.name,server.descriptions);
+            Console.WriteLine("Server {0} as {1} started...",server.getName() , server.descriptions);
 
             bool Connect = true;
             while (Connect)
@@ -85,8 +79,6 @@ namespace OPU
             server.StopAllDevices();
             agserv.Stop();
             Console.WriteLine("\nServer stoped.");
-
         }
-
     }
 }

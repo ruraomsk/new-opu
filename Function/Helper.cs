@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Function
 {
     static public class Helper
     {
         static public int live = 0;
-        static char[] delimiterChars = { '.', ',' };
-
+        static readonly char[] delimiterChars = { '.', ',' };
 
         static public bool blink=false;
 

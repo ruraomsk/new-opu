@@ -1,15 +1,12 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Function
 {
     static public class Funct
     {
         static function[] nameFunction = {
-            //new Not(),
+            new Not(),
             new AND(),
             new OR(),
             //new SUM(),

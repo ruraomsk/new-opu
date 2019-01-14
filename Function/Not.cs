@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Function
 {
@@ -16,9 +12,8 @@ namespace Function
 
         public override string calculate(List<string> values)
         {
-            bool b = Helper.ReadAsBool(values[0]);
-            b = !b;
-            return b.ToString();
+            bool result = !Helper.ReadAsBool(values[0]);
+            return result.ToString();
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace inout
 {
-    public class ModbusCommon : Driver, ViewTable
+    abstract public class ModbusCommon : Driver, ViewTable
     {
         protected object mutex = new object();
         // Регистры для обмена с устройством
@@ -23,6 +23,13 @@ namespace inout
             ModbusRegister reg;
             if (!TryGetValue(nameValue, out reg)) return " ";
             return reg.Description;
+        }
+
+        public override int GetSize(string nameValue)
+        {
+            ModbusRegister reg;
+            if (!TryGetValue(nameValue, out reg)) return 1;
+            return reg.Size;
         }
 
         protected void MakeAllArrays()
@@ -102,10 +109,12 @@ namespace inout
         {
             return regsModbus.TryGetValue(nameValue, out reg);
         }
+
         public override bool IsHaveVariable(string nameValue)
         {
             return regsModbus.ContainsKey(nameValue);
         }
+
         public override string GetValue(string nameValue)
         {
             ModbusRegister reg;
@@ -115,13 +124,16 @@ namespace inout
                 {
                     switch (reg.Type)
                     {
-                        case 0:
+                        case ModbusRegister.TYPE_COILS:
                             return reg.GetAsBool(coils);
-                        case 1:
+
+                        case ModbusRegister.TYPE_DI:
                             return reg.GetAsBool(di);
-                        case 2:
+
+                        case ModbusRegister.TYPE_IR:
                             return reg.GetAsValue(ir);
-                        case 3:
+
+                        case ModbusRegister.TYPE_HR:
                             return reg.GetAsValue(hr);
                     }
                 }

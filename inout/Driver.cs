@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace inout
 {
-    public class Driver
+    abstract public class Driver
     {
         public string name="unknow";
         public string description ="driver not named";
@@ -15,11 +15,18 @@ namespace inout
         public virtual void Start() { }
         public virtual void Stop() { }
         public virtual void Run() { }
-        public virtual bool SetValue(string nameValue, string value) { return false; }
+
+        //public virtual bool SetValue(string nameValue, string value) { return false; }
+        abstract public bool SetValue(string nameValue, string value);
+
+
         public virtual string GetValue(string nameValue) => null;
 
         public virtual Util.TYPEVAR GetTypeVar(string nameValue) => Util.TYPEVAR.BOOLEAN;
         public virtual string GetDescription(string nameValue) => "";
+
+        public abstract int GetSize(string nameValue);
+
 
         public bool IsConnected() => Connect;
         public string GetName() => name;

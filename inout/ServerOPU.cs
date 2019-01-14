@@ -5,7 +5,7 @@ namespace inout
 {
     public class ServerOPU
     {
-        public string name;
+        private string nameDevice;
         public string descriptions;
         public int stepCycle;
         public int stepReconnect;
@@ -17,7 +17,7 @@ namespace inout
 
         public ServerOPU(string name, string descriptions, int stepCycle, int stepReconnect)
         {
-            this.name = name;
+            this.nameDevice = name;
             this.descriptions = descriptions;
             this.stepCycle = stepCycle;
             this.stepReconnect = stepReconnect;
@@ -25,6 +25,10 @@ namespace inout
             blinds = new List<Blind>();
             vars = new Dictionary<string, Variable>();
             LoadingError = false;
+        }
+
+        public string getName() {
+            return nameDevice;
         }
 
         public bool GetLoadingError() {
@@ -50,33 +54,39 @@ namespace inout
         {
             foreach (Variable var in vars.Values)
             {
-                string[] name = var.GetName().Split(':');
-                if (name.Length == 1) continue;
-                if (!var.LoadFromDevice) return;
+
+                string[] nameVariable = var.GetName().Split(':');
+                if (nameVariable.Length == 1) continue;
+
+                if (!var.LoadFromDevice) continue;
+
                 Driver drv;
-                if(!drvs.TryGetValue(name[0],out drv))
+                if(!drvs.TryGetValue(nameVariable[0],out drv))
                 {
-                    Log.Fatal(ClassName, "Нет такого устройства " + name[0]);
+                    Log.Fatal(ClassName, "Нет такого устройства " + nameVariable[0]);
                     continue;
                 }
-                var.SetVarValue(drv.GetValue(name[1]));
+                var.SetVarValue(drv.GetValue(nameVariable[1]));
+
             }
         }
+
         public void SaveVariablesToDevices()
         {
             foreach (Variable var in vars.Values)
             {
                 //if (!var.IsChanged()) continue;
-                string[] name = var.GetName().Split(':');
-                if (name.Length == 1) continue;
-                if (!var.SaveToDevice) return;
+                string[] nameVariable = var.GetName().Split(':');
+                if (nameVariable.Length == 1) continue;
+                if (!var.SaveToDevice) continue;
+
                 Driver drv;
-                if (!drvs.TryGetValue(name[0], out drv))
+                if (!drvs.TryGetValue(nameVariable[0], out drv))
                 {
-                    Log.Fatal(ClassName, "Нет такого устройства " + name[0]);
+                    Log.Fatal(ClassName, "Нет такого устройства " + nameVariable[0]);
                     continue;
                 }
-                drv.SetValue(name[1], var.GetVarValue());
+                drv.SetValue(nameVariable[1], var.GetVarValue());
                 var.NewCycle();
             }
 
@@ -102,6 +112,7 @@ namespace inout
                     Log.Fatal(ClassName, "Не найдена переменная " + blnd.resultName);
                     continue;
                 }
+
                 var.SetVarValue(result);
                 vars[blnd.resultName] = var;
             }
@@ -143,6 +154,7 @@ namespace inout
         {
             string[] nn = anyname.Split(':');
             newname = anyname;
+
             if (nn.Length == 2)
             {
                 if (!drvs.ContainsKey(nn[0]))
@@ -155,7 +167,7 @@ namespace inout
                 string desc = drv.GetDescription(nn[1]);
                 if (!vars.ContainsKey(newname))
                 {
-                    Variable var = new Variable(newname, desc, drv.GetTypeVar(nn[1]));
+                    Variable var = new Variable(newname, desc, drv.GetTypeVar(nn[1]), drv.GetSize(nn[1]));
                     if (output) var.SaveToDevice = true; ;
                     if (!output) var.LoadFromDevice = true;
                     vars.Add(newname, var);
@@ -173,7 +185,7 @@ namespace inout
                         newname = drv.GetName() + ":" + nn[0];
                         if (!vars.ContainsKey(newname))
                         {
-                            Variable var = new Variable(newname, desc, drv.GetTypeVar(nn[0]));
+                            Variable var = new Variable(newname, desc, drv.GetTypeVar(nn[0]), drv.GetSize(nn[0]));
                             if (output) var.SaveToDevice = true; ;
                             if (!output) var.LoadFromDevice = true;
                             vars.Add(newname, var);
@@ -185,10 +197,12 @@ namespace inout
             }
             return false;
         }
+
         public void AddVariable(Variable var)
         {
             vars.Add(var.GetName(), var);
         }
+
         public List<string> ListAllBlaind()
         {
             List<string> result = new List<string>();

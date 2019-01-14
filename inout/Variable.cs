@@ -14,32 +14,50 @@ namespace inout
         public bool SaveToDevice = false;
 
 
-        public Variable(string Name, string Description, Util.TYPEVAR TypeVar)
+        public Variable(string Name, string Description, Util.TYPEVAR TypeVar, int size=1)
         {
             this.Name = Name;
             this.Description = Description;
             this.TypeVar = TypeVar;
+
             for (Pos = 0; Pos < 3; Pos++)
             {
-                ValueVar[Pos] = DefaultValue();
+                ValueVar[Pos] = DefaultValue(size);
             }
             Changes = true;
             Pos = 0;
         }
 
-        private string DefaultValue()
+        private string DefaultValue(int size)
         {
+            string unit = 0.0.ToString();
+
             switch (TypeVar)
             {
                 case Util.TYPEVAR.BOOLEAN:
-                    return false.ToString();
+                    unit = false.ToString();
+                    break;
+
                 case Util.TYPEVAR.INTEGER:
-                    return 0.ToString(); ;
+                    unit = 0.ToString();
+                    break;
+
                 case Util.TYPEVAR.DOUBLE:
-                    return 0.0.ToString();
+                    unit = 0.0.ToString();
+                    break;
             }
-            return 0.0.ToString();
+
+            string result = "";
+            for (int i=0; i < size; i++) {
+                if ( i > 0 ) {
+                    result += " ";
+                }
+                result += unit;
+            }
+
+            return result;
         }
+
         public bool IsChanged()
         {
             return Changes;
@@ -48,6 +66,7 @@ namespace inout
         {
             Changes = false;
         }
+
         public void SetVarValue(string value)
         {
             Pos = ++Pos >= 3 ? 0 : Pos;
@@ -57,9 +76,10 @@ namespace inout
                 Changes = true;
             }
         }
+
         public string GetVarValue()
-        {
-            if (ValueVar[0].Equals(ValueVar[1]))
+       {
+           if (ValueVar[0].Equals(ValueVar[1]))
             {
                 return ValueVar[0];
             }
@@ -76,6 +96,7 @@ namespace inout
 
             return ValueVar[Pos];
         }
+
         public string GetVarValueComponent(int index)
         {
             string[] result = GetVarValue().Split(' ');

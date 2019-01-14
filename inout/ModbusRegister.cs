@@ -8,6 +8,11 @@ namespace inout
 {
     public class ModbusRegister :ViewTable
     {
+        public const int TYPE_COILS=0;
+        public const int TYPE_DI =1;
+        public const int TYPE_IR=2;
+        public const int TYPE_HR=3;
+
         private string name;
         private string description;
         private int type;
@@ -87,7 +92,7 @@ namespace inout
         }
         public bool CompareAsUshort(ref ushort[] buffer, ref ushort[] bufferValue)
         {
-            if (address + bufferValue.Length > buffer.Length) return false;
+             if (address + bufferValue.Length > buffer.Length) return false;
             for (int i = 0; i < bufferValue.Length; i++)
             {
                 if (buffer[address + i] != bufferValue[i]) return false;
@@ -231,6 +236,7 @@ namespace inout
             bb[3] = b1[1];
             return bb;
         }
+
         private byte[] Read8Bytes(ushort[] vs, int i)
         {
             byte[] b1 = BitConverter.GetBytes(vs[address + (i * GetElementLenght())]);
@@ -286,6 +292,7 @@ namespace inout
             return j;
         }
     }
+
     public class ModbusRegisterWithValue
     {
         public ModbusRegister register;
@@ -294,7 +301,7 @@ namespace inout
         public ModbusRegisterWithValue(ModbusRegister register, string value)
         {
             this.register = register;
-            Value = value;
+            this.Value = value;
         }
     }
 }

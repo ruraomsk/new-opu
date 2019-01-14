@@ -148,7 +148,7 @@ namespace AgentServer
         }
         private string workGetAllServerInfo()
         {
-            result += "\"Server\": \""+server.name+"\",";
+            result += "\"Server\": \""+ server.getName() +"\",";
             result += "\"Description\": \"" + server.descriptions + "\",";
             result += "\"Step\": \"" + server.stepCycle.ToString() + "\",";
             result += "\"Reconnect\": \"" + server.stepReconnect.ToString() + "\",";

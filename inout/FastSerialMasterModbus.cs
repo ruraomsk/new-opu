@@ -64,10 +64,9 @@ namespace inout
             {
                 throw new ArgumentException("Драйвер " + ClassName + " могжет быть только хотя бы один holding register " + name);
             }
-            for (int i = 1; i < 255; i++)
-            {
-                hregs[i]=new ushort[lenHrs];
-            }
+
+            initHregs();
+
         }
         public override void Init(int step, int timeout)
         {
@@ -76,14 +75,22 @@ namespace inout
             Connect = true;
             Reconnect.AddDriver(name, this);
         }
+
+
+        private void initHregs() {
+            for (int i = 1; i < 255; i++)
+            {
+                hregs[i] = new ushort[lenHrs];
+            }
+        }
+
+
         public override void Start()
         {
             try
             {
-                for (int i = 1; i < 256; i++)
-                {
-                    hregs[i] = new ushort[lenHrs];
-                }
+                initHregs();
+
                 serialPort = new SerialPort(param.portname);
                 serialPort.BaudRate = param.baudRate; // скорость передачи
                 serialPort.DataBits = param.databits;
@@ -170,7 +177,6 @@ namespace inout
             serialPort.Dispose();
             serialPort.Close();
             serialPort = null;
-
         }
 
         private bool sendMessage(int uid, ushort address, ushort[] value)
@@ -258,6 +264,7 @@ namespace inout
             }
             return true;
         }
+
         public override void Reconect()
         {
             Log.Info(ClassName, "Устройство " + name + " перезапускается.");
@@ -265,11 +272,13 @@ namespace inout
             Start();
             Log.Info(ClassName, "Устройство " + name + " перезапущенно.");
         }
+
         public override string Status()
         {
             return "Устройство " + name + ":" + description + " " + (IsConnected() ? "запущено." : "остановлено.")
                     + "Последняя операция " + lastOperation.ToLongTimeString();
         }
+
         public override string[] ColumnsName()
         {
             ModbusRegister[] regs = new ModbusRegister[regsModbus.Count];

@@ -6,7 +6,7 @@ using loggers;
 
 namespace inout
 {
-    public class ApaxCommon : Driver, ViewTable
+    abstract public class ApaxCommon : Driver, ViewTable
     {
         protected object mutex = new object();
         protected Dictionary<string, ApaxRegister> regsApax;
@@ -52,6 +52,14 @@ namespace inout
             if (!TryGetValue(nameValue, out reg)) return " ";
             return reg.Description;
         }
+
+        public override int GetSize(string nameValue)
+        {
+            ApaxRegister reg;
+            if (!TryGetValue(nameValue, out reg)) return 1;
+            return reg.Size;
+        }
+
         public bool Open(string nameDevice)
         {
             try
