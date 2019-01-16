@@ -41,65 +41,15 @@ namespace inout
 
         public override bool SetValue(string nameValue, string value)
         {
-            bool NeedSend = false;
             ModbusRegister reg;
             if (base.TryGetValue(nameValue, out reg))
             {
-                /*
-                try
-                {
-                    switch (reg.Type)
-                    {
-                        case ModbusRegister.TYPE_COILS:
-
-                            bool[] c = reg.SetAsBool(value);
-                            lock (mutex)
-                            {
-                                if (!reg.CompareAsBool(ref coils, ref c))
-                                {
-                                    NeedSend = true;
-                                    for (int i = 0; i < c.Length; i++)
-                                    {
-                                        coils[reg.Address + i] = c[i];
-                                    }
-                                }
-                            }
-                            break;
-
-                        case ModbusRegister.TYPE_HR:
-                            ushort[] r = reg.SetAsValue(value);
-                            lock (mutex)
-                            {
-                                if (!reg.CompareAsUshort(ref hr, ref r))
-                                {
-                                    NeedSend = true;
-                                    for (int i = 0; i < r.Length; i++)
-                                    {
-                                        hr[reg.Address + i] = r[i];
-                                    }
-                                }
-                            }
-                            break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.Warn(ClassName, "Устройство " + name + " " + ex.Message);
-                    Connect = false;
-                }
-                */
                 if (!Connect)
                 {
                     return true;
                 }
 
-/*                if (NeedSend)
-                {
-                    inque.Enqueue(new ModbusRegisterWithValue(reg, value));
-                }
-                */
                 inque.Enqueue(new ModbusRegisterWithValue(reg, value));
-
                 return true;
             };
             return false;
@@ -112,7 +62,7 @@ namespace inout
                 tcpClient = new TcpClient();
                 if (!tcpClient.ConnectAsync(ip, port).Wait(1000))
                 {
-                    Log.Info(ClassName, "Устройство " + name + " не запущено." );
+                    Log.Info(ClassName, "Устройство " + name + " не запущено.");
                     tcpClient = null;
                     drvThr = null;
                     Connect = false;
@@ -122,7 +72,8 @@ namespace inout
                 master = ModbusIpMaster.CreateIp(tcpClient);
                 master.Transport.ReadTimeout = timeout;
                 master.Transport.WriteTimeout = timeout;
-                master.Transport.Retries = 3;
+                //                master.Transport.Retries = 3;
+                master.Transport.Retries = 1;
                 drvThr = new Thread(this.Run);
                 drvThr.Start();
                 Reconnect.AddDriver(name, this);
@@ -131,7 +82,7 @@ namespace inout
             }
             catch (Exception ex)
             {
-                Log.Info(ClassName, "Устройство " + name + " не запущено."+ex.Message);
+                Log.Info(ClassName, "Устройство " + name + " не запущено." + ex.Message);
                 tcpClient = null;
                 drvThr = null;
                 Connect = false;
@@ -163,7 +114,6 @@ namespace inout
             }
             Log.Info(ClassName, "Устройство " + name + " остановлено управлением.");
         }
-
         public override void Reconect()
         {
             Log.Info(ClassName, "Устройство " + name + " перезапускается.");
@@ -171,50 +121,28 @@ namespace inout
             Start();
             Log.Info(ClassName, "Устройство " + name + " перезапущенно.");
         }
-
         public override string Status()
         {
             return "Устройство " + name + ":" + description + " " + (IsConnected() ? "запущено." : "остановлено.")
                     + "Последняя операция " + lastOperation.ToLongTimeString();
         }
 
-
-        private bool isNewCoils( bool[] checkValue ) {
-
-            if (lenCoils >= checkValue.Length) {
-
-                for (int i = checkValue.Length-1; i >= 0; i--)
-                {
-                    if (coils[lenCoils-i-1] != checkValue[i])
-                    {
-                        return true;
-                    }
+        private bool IsNewCoils(bool[] checkValue, ushort address) {
+            for (int i = 0; i < checkValue.Length; i++) {
+                if (coils[address + i] != checkValue[i]) {
+                    return true;
                 }
-
-                return false;
             }
-            return true;
+            return false;
         }
-
-
-        private bool isNewHR( ushort[] checkValue ) {
-            if ( lenHrs >= checkValue.Length ) {
-
-                for (int i=checkValue.Length-1; i >= 0; i-- ) {
-                    if (  hr[lenHrs-i-1] != checkValue[i]  ) {
-                        return true;
-                    }
-                    return false;
+        private bool IsNewHR(ushort[] checkValue, int address) {
+            for (int i = 0; i < checkValue.Length; i++) {
+                if (hr[address + i] != hr[i]) {
+                    return true;
                 }
-
-
-                return true;
             }
-
-            return true;
+            return false;
         }
-
-   
 
         override public void Run()
         {
@@ -223,13 +151,6 @@ namespace inout
                 DateTime tm = DateTime.Now;
                 while (!inque.IsEmpty)
                 {
-                    /*
-                    if (!Connect)
-                    {
-                        continue;
-                    }
-                    */
-
                     ModbusRegisterWithValue mregv;
                     if (!inque.TryDequeue(out mregv))
                     {
@@ -244,21 +165,24 @@ namespace inout
                                 // проверка в coil проверить значение
                                 bool[] currentValue = mregv.register.SetAsBool(mregv.Value);
 
-                                if ( isNewCoils( currentValue ) ) {
+                                if (IsNewCoils(currentValue, mregv.register.Address)) {
                                     master.WriteMultipleCoils(mregv.register.Address, currentValue);
 
-                                    // поправить coils
-
+                                    for (int i = 0; i < currentValue.Length; i++) {
+                                        coils[mregv.register.Address + i] = currentValue[i];
+                                    }
                                     Connect = true;
                                 }
                                 break;
 
                             case ModbusRegister.TYPE_HR:
                                 ushort[] currentValueHR = mregv.register.SetAsValue(mregv.Value);
-                                if ( isNewHR( currentValueHR ) ) {
-                                    master.WriteMultipleRegisters(mregv.register.Address, currentValueHR );
+                                if (IsNewHR(currentValueHR, mregv.register.Address)) {
+                                    master.WriteMultipleRegisters(mregv.register.Address, currentValueHR);
+                                    for (int i = 0; i < currentValueHR.Length; i++) {
+                                        hr[mregv.register.Address + i] = currentValueHR[i];
+                                    }
                                     Connect = true;
-                                    // поправить hrs
                                 }
                                 break;
                         }
@@ -273,13 +197,19 @@ namespace inout
                 long startReadAll = DateTime.Now.Ticks;
 
                 ReadAllCoils();
+
+                long timeEndRealAllCoils = DateTime.Now.Ticks;
+
                 ReadAllDI();
+                long timeEndRealAllDI = DateTime.Now.Ticks;
 
                 ReadAllIR();
-                ReadAllHR();
+                long timeEndRealAllIR = DateTime.Now.Ticks;
+
+
+                ReadBlockHR();
 
                 lastOperation = DateTime.Now;
-
 
                 long untilTime = (lastOperation.Ticks - tm.Ticks) / 10000L;
 
@@ -288,9 +218,18 @@ namespace inout
 
                     Log.Warn(ClassName, "Устройство " + name + " Время цикла превысило шаг и составило " + untilTime.ToString());
 
-                    long timeReadAll = (lastOperation.Ticks - startReadAll)/10000L;
+                    long timeReadAll = (lastOperation.Ticks - startReadAll) / 10000L;
 
-                    Log.Warn(ClassName, "Время чтение ALLсоставило " + timeReadAll.ToString());
+                    Log.Warn(ClassName, "Время чтения ALL составило " + timeReadAll.ToString());
+
+
+                    long timeReadAllCoils = (timeEndRealAllCoils - startReadAll) / 10000L;
+                    long timeReadAllDI = (timeEndRealAllDI - timeEndRealAllCoils) / 10000L;
+                    long timeReadAllIR = (timeEndRealAllIR - timeEndRealAllDI) / 10000L;
+                    long timeReadAllHR = (lastOperation.Ticks - timeEndRealAllIR) / 10000L;
+
+                    Log.Warn(ClassName, "Время чтения блоков AllCoils == " + timeReadAllCoils.ToString() + " AllDI == " + timeReadAllDI.ToString() + " AllIR == " + timeReadAllIR.ToString()
+                        + " AllHR == " + timeReadAllHR.ToString());
                 }
                 else
                 {
@@ -319,7 +258,7 @@ namespace inout
         }
 
         private void ReadAllCoils() {
-            if ( Connect && lenCoils > 0)
+            if (Connect && lenCoils > 0)
             {
                 bool[] c;
                 try
@@ -333,7 +272,7 @@ namespace inout
                     return;
                 }
                 Connect = true;
-                lock (mutex)
+                //                lock (mutex)
                 {
                     for (int i = 0; i < lenCoils; i++)
                     {
@@ -344,7 +283,7 @@ namespace inout
         }
 
         private void ReadAllDI() {
-            if ( Connect && lenDis > 0)
+            if (Connect && lenDis > 0)
             {
                 bool[] d;
                 try
@@ -358,7 +297,7 @@ namespace inout
                     return;
                 }
                 Connect = true;
-                lock (mutex)
+                //                lock (mutex)
                 {
                     for (int i = 0; i < lenDis; i++)
                     {
@@ -368,20 +307,20 @@ namespace inout
             }
         }
 
+
         private void ReadAllIR() {
-            if ( Connect && lenIrs > 0) {
+            if (Connect && lenIrs > 0) {
                 ushort[] r;
                 ushort stadr = 0;
                 ushort len = lenIrs;
 
                 do
                 {
-                    ushort lenl = (len > 100) ? (ushort)100 : len;
+                    ushort lenl = (len > ModbusRegister.LENGTH_BLOCK_REGISTERS) ? (ushort)ModbusRegister.LENGTH_BLOCK_REGISTERS : len;
                     try
                     {
                         r = master.ReadInputRegisters(stadr, lenl);
                         Connect = true;
-
                     }
                     catch (Exception ex)
                     {
@@ -402,35 +341,38 @@ namespace inout
             }
         }
 
-        private void ReadAllHR() {
+        private void ReadBlockHR() {
             if ( Connect && lenHrs > 0 ) {
                 ushort[] r;
-                ushort stadr = 0;
-                ushort len = lenHrs;
-                do
+
+                ushort lengthBlock = ( (ushort) (currentLengthHR + ModbusRegister.LENGTH_BLOCK_REGISTERS) <= lenHrs) ? 
+                    ModbusRegister.LENGTH_BLOCK_REGISTERS : (ushort)(lenHrs - currentLengthHR) ;
+
+                try {
+                    r = master.ReadHoldingRegisters( (ushort)(ModbusRegister.START_HR_ADDRESS + currentLengthHR), lengthBlock);
+                    Connect = true;
+
+                }
+                catch (Exception ex)
                 {
-                    ushort lenl = (len > 100) ? (ushort)100 : len;
-                    try
-                    {
-                        r = master.ReadHoldingRegisters(stadr, lenl);
-                        Connect = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Warn(ClassName, "Устройство " + name + " " + ex.Message);
-                        Connect = false;
-                        return;
-                    }
-                    lock (mutex)
-                    {
-                        for (int i = 0; i < lenl; i++)
-                        {
-                            hr[stadr + i] = r[i];
+                    Log.Warn(ClassName, "Устройство " + name + " " + ex.Message);
+                    Connect = false;
+                    return;
+                }
+
+                for ( ushort i=0; i< lengthBlock; i++ ) {
+                    currentHr[currentLengthHR + i] = r[i];
+                }
+                currentLengthHR += lengthBlock;
+
+                if (currentLengthHR == lenHrs) {
+                    lock (mutex) {
+                        for ( int i=0; i < lenHrs; i++) {
+                            hr[i] = currentHr[i];
                         }
                     }
-                    stadr += lenl;
-                    len -= lenl;
-                } while (len > 0);
+                    currentLengthHR = 0;
+                }
             }
         }
 

@@ -11,6 +11,10 @@ namespace inout
         protected bool[] di;
         protected ushort[] ir;
         protected ushort[] hr;
+
+        protected ushort[] currentHr;
+        protected ushort currentLengthHR = 0;
+
         // Размерности регистров
         protected ushort lenCoils = 0;
         protected ushort lenDis = 0;
@@ -75,6 +79,8 @@ namespace inout
             if (lenHrs > 0)
             {
                 hr = new ushort[lenHrs];
+                currentHr = new ushort[lenHrs];
+
             }
             // Утстанавливаем начальные значения регистров
             for (int i = 0; i < lenCoils; i++)
@@ -96,8 +102,8 @@ namespace inout
             {
                 hr[i] = 0;
             }
-
         }
+
         public override Util.TYPEVAR GetTypeVar(string nameValue)
         {
             ModbusRegister reg;
@@ -118,27 +124,35 @@ namespace inout
         public override string GetValue(string nameValue)
         {
             ModbusRegister reg;
+            string result = null;
+
             if (regsModbus.TryGetValue(nameValue, out reg))
             {
-                lock (mutex)
-                {
-                    switch (reg.Type)
-                    {
-                        case ModbusRegister.TYPE_COILS:
-                            return reg.GetAsBool(coils);
+                switch (reg.Type) {
+                    case ModbusRegister.TYPE_COILS:
+                        result = reg.GetAsBool(coils);
+                        break;
 
-                        case ModbusRegister.TYPE_DI:
-                            return reg.GetAsBool(di);
+                    case ModbusRegister.TYPE_DI:
+                        result = reg.GetAsBool(di);
+                        break;
 
-                        case ModbusRegister.TYPE_IR:
-                            return reg.GetAsValue(ir);
+                    case ModbusRegister.TYPE_IR:
+                        lock (mutex)
+                        {
+                            result = reg.GetAsValue(ir);
+                        }
+                        break;
 
-                        case ModbusRegister.TYPE_HR:
-                            return reg.GetAsValue(hr);
-                    }
+                    case ModbusRegister.TYPE_HR:
+                        lock (mutex)
+                        {
+                            result = reg.GetAsValue(hr);
+                        }
+                        break;
                 }
-            };
-            return null;
+            }
+            return result;
         }
 
     }

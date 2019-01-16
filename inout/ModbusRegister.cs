@@ -13,6 +13,10 @@ namespace inout
         public const int TYPE_IR=2;
         public const int TYPE_HR=3;
 
+        public const ushort LENGTH_BLOCK_REGISTERS = 125;
+
+        public const ushort START_HR_ADDRESS = 0;
+
         private string name;
         private string description;
         private int type;
@@ -90,6 +94,7 @@ namespace inout
             }
             return true;
         }
+
         public bool CompareAsUshort(ref ushort[] buffer, ref ushort[] bufferValue)
         {
              if (address + bufferValue.Length > buffer.Length) return false;
@@ -99,11 +104,13 @@ namespace inout
             }
             return true;
         }
+
         public string[] ColumnsName()
         {
             string[] result = { "Name", "Description", "Type", "Format", "Address","Size", "uId" };
             return result;
         }
+
         public string[] Row(int row)
         {
             string[] result = new string[7];
@@ -144,38 +151,44 @@ namespace inout
         {
             if (GetLastPosition() > vs.Length) throw new ArgumentException("Большой адрес " + name);
             if (type < 2) throw new ArgumentException("Неверный тип " + name);
-            string result = "";
+
+            StringBuilder resultBuilder = new StringBuilder("");
+
+            
             for (int i = 0; i < size; i++)
             {
+                if (i > 0) {
+                    resultBuilder.Append(" ");
+                }
                 switch (format)
                 {
                     case 2:
                     case 3:
                         // двух байтный целый
-                        result+=vs[address+i].ToString();
+                        resultBuilder.Append(vs[address + i].ToString());
                         break;
                     case 4:
                     case 5:
                     case 6:
                     case 7:
-                        result += BitConverter.ToInt32(Read4Bytes(vs,i), 0).ToString();
+                        resultBuilder.Append( BitConverter.ToInt32(Read4Bytes(vs,i), 0).ToString());
                         break;
                     case 8:
                     case 9:
-                        result += BitConverter.ToSingle(Read4Bytes(vs,i), 0).ToString();
+                        resultBuilder.Append( BitConverter.ToSingle(Read4Bytes(vs,i), 0).ToString() );
                         break;
                     case 11:
                     case 13:
-                        result += BitConverter.ToInt64(Read8Bytes(vs,i), 0).ToString();
+                        resultBuilder.Append( BitConverter.ToInt64(Read8Bytes(vs,i), 0).ToString());
                         break;
                     case 14:
                     case 15:
-                        result += BitConverter.ToDouble(Read8Bytes(vs,i), 0).ToString();
+                        resultBuilder.Append(BitConverter.ToDouble(Read8Bytes(vs,i), 0).ToString());
                         break;
                 }
-                result += " ";
             };
-            return result;
+
+            return resultBuilder.ToString();
         }
         public ushort[] SetAsValue(string value)
         {

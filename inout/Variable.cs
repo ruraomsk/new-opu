@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Text;
 
 namespace inout
 {
     public class Variable : ViewTable
     {
+        public static string DEFAULT_INT = 0.ToString();
+        public static string DEFAULT_DOUBLE = 0.0.ToString();
+        public static string DEFAULT_BOOL = false.ToString();
+
+
         private string Name;
         private string Description;
         private string[] ValueVar = new string[3];
@@ -30,32 +36,33 @@ namespace inout
 
         private string DefaultValue(int size)
         {
-            string unit = 0.0.ToString();
+            string unit = Variable.DEFAULT_DOUBLE;
 
             switch (TypeVar)
             {
                 case Util.TYPEVAR.BOOLEAN:
-                    unit = false.ToString();
+                    unit = Variable.DEFAULT_BOOL;
                     break;
 
                 case Util.TYPEVAR.INTEGER:
-                    unit = 0.ToString();
+                    unit = Variable.DEFAULT_INT;
                     break;
 
                 case Util.TYPEVAR.DOUBLE:
-                    unit = 0.0.ToString();
+                    unit = Variable.DEFAULT_DOUBLE;
                     break;
             }
 
-            string result = "";
+            StringBuilder resultBuilder = new StringBuilder("");
+
             for (int i=0; i < size; i++) {
                 if ( i > 0 ) {
-                    result += " ";
+                    resultBuilder.Append (" ");
                 }
-                result += unit;
+                resultBuilder.Append(unit);
             }
 
-            return result;
+            return resultBuilder.ToString();
         }
 
         public bool IsChanged()
@@ -110,33 +117,31 @@ namespace inout
         public bool GetAsBool() => Boolean.Parse(GetVarValue());
         public long GetAsInteger() => long.Parse(GetVarValue());
         public double GetAsDouble() => double.Parse(GetVarValue());
+
         public void SetAsBool(bool value)
         {
-            if (TypeVar != Util.TYPEVAR.BOOLEAN)
+            if (TypeVar == Util.TYPEVAR.BOOLEAN)
             {
-                return;
+                SetVarValue(value.ToString());
             }
-
-            SetVarValue(value.ToString());
         }
+
         public void SetAsInteger(long value)
         {
-            if (TypeVar != Util.TYPEVAR.INTEGER)
+            if (TypeVar == Util.TYPEVAR.INTEGER)
             {
-                return;
+                SetVarValue(value.ToString());
             }
-
-            SetVarValue(value.ToString());
         }
+
         public void SetAsDouble(double value)
         {
-            if (TypeVar != Util.TYPEVAR.DOUBLE)
+            if (TypeVar == Util.TYPEVAR.DOUBLE)
             {
-                return;
+                SetVarValue(value.ToString());
             }
-
-            SetVarValue(value.ToString());
         }
+
         override public string ToString()
         {
             return Name + "=" + GetVarValue();

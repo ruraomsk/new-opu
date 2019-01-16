@@ -102,4 +102,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>C:\newOPU\copy.bat</PostBuildEvent>
+  </PropertyGroup>
 </Project>

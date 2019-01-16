@@ -54,10 +54,8 @@ namespace inout
         {
             foreach (Variable var in vars.Values)
             {
-
                 string[] nameVariable = var.GetName().Split(':');
                 if (nameVariable.Length == 1) continue;
-
                 if (!var.LoadFromDevice) continue;
 
                 Driver drv;
@@ -66,6 +64,8 @@ namespace inout
                     Log.Fatal(ClassName, "Нет такого устройства " + nameVariable[0]);
                     continue;
                 }
+
+
                 var.SetVarValue(drv.GetValue(nameVariable[1]));
 
             }
