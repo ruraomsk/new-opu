@@ -1,4 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+
+using System.Collections.Generic;
+using System.Linq;
+
+
+
 using loggers;
 using Function;
 namespace inout
@@ -50,12 +57,30 @@ namespace inout
                 drv.Stop();
             }
         }
+
+        public void PrintVarialble()
+        {
+            List<Variable> listVars = vars.Values.ToList();
+
+            listVars.Sort((var1, var2) => var1.GetName().CompareTo(var2.GetName()));
+
+            string path = @"c:\newOPU\var.txt";
+            StreamWriter file = new StreamWriter(path, true);
+            foreach (Variable current in listVars) {
+                file.WriteLine(current.GetName());
+            }
+
+            file.Close();
+        }
+
         public void LoadVariablesFromDevices()
         {
             foreach (Variable var in vars.Values)
             {
                 string[] nameVariable = var.GetName().Split(':');
+
                 if (nameVariable.Length == 1) continue;
+
                 if (!var.LoadFromDevice) continue;
 
                 Driver drv;
@@ -65,9 +90,7 @@ namespace inout
                     continue;
                 }
 
-
                 var.SetVarValue(drv.GetValue(nameVariable[1]));
-
             }
         }
 
@@ -78,6 +101,14 @@ namespace inout
                 //if (!var.IsChanged()) continue;
                 string[] nameVariable = var.GetName().Split(':');
                 if (nameVariable.Length == 1) continue;
+
+                if (nameVariable[1].Equals("FD19") || nameVariable[1].Equals("FD18"))
+                {
+                    int a = 0;
+                    a++;
+                }
+
+
                 if (!var.SaveToDevice) continue;
 
                 Driver drv;
@@ -200,6 +231,10 @@ namespace inout
 
         public void AddVariable(Variable var)
         {
+            if ( var.GetName().Contains("B6IS11LDU") ) {
+                int a = 1;
+                a++;
+            }
             vars.Add(var.GetName(), var);
         }
 

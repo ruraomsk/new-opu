@@ -16,6 +16,7 @@ namespace OPU
             if(args.Length != 1)
             {
                 Console.WriteLine("Error parametrs:\nusage OPU path_xml_file");
+                return;
             }
             string path = args[0];
             Console.Write("Loading from " + path + " ");
@@ -46,11 +47,15 @@ namespace OPU
             Thread.Sleep(5000);
             Console.WriteLine("Server {0} as {1} started...",server.getName() , server.descriptions);
 
+            server.PrintVarialble();
+
+
             bool Connect = true;
             while (Connect)
             {
 
                 DateTime tm = DateTime.Now;
+
                 server.LoadVariablesFromDevices();
                 server.MakeOneStep();
                 server.SaveVariablesToDevices();
