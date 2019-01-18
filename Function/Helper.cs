@@ -24,7 +24,7 @@ namespace Function
         {
             bool result;
             if (bool.TryParse(value, out result)) return result;
-            if (value.Contains("0")) return false;
+            if (value.Equals("0")) return false;
             return true;
         }
 

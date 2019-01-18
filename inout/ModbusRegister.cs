@@ -135,6 +135,7 @@ namespace inout
             for(int i=0;i<size;i++) result+=vs[address+i].ToString()+" ";
             return result;
         }
+
         public bool[] SetAsBool(string value)
         {
             if (type > 1) throw new ArgumentException("Неверный тип " + name);

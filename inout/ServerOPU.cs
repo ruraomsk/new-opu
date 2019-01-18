@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-using System.Collections.Generic;
 using System.Linq;
-
-
 
 using loggers;
 using Function;
+
 namespace inout
 {
     public class ServerOPU
@@ -69,7 +67,6 @@ namespace inout
             foreach (Variable current in listVars) {
                 file.WriteLine(current.GetName());
             }
-
             file.Close();
         }
 
@@ -90,7 +87,7 @@ namespace inout
                     continue;
                 }
 
-                var.SetVarValue(drv.GetValue(nameVariable[1]));
+                 var.SetVarValue(drv.GetValue(nameVariable[1]));
             }
         }
 
@@ -102,12 +99,11 @@ namespace inout
                 string[] nameVariable = var.GetName().Split(':');
                 if (nameVariable.Length == 1) continue;
 
-                if (nameVariable[1].Equals("FD19") || nameVariable[1].Equals("FD18"))
+                if (nameVariable[1].Equals("FD33"))
                 {
                     int a = 0;
                     a++;
                 }
-
 
                 if (!var.SaveToDevice) continue;
 
@@ -122,11 +118,18 @@ namespace inout
             }
 
         }
+
         public void MakeOneStep()
         {
             Variable var;
             foreach (Blind blnd in blinds)
             {
+                if ( blnd.resultName.Equals("Fout:FD33") ) {
+                    int a = 0;
+                    a++;
+                }
+
+
                 List<string> pars = new List<string>();
                 foreach (string str in blnd.paramNames)
                 {
@@ -148,12 +151,15 @@ namespace inout
                 vars[blnd.resultName] = var;
             }
         }
+
         public bool isError() => LoadingError;
+
         public void AddDriver(Driver drv, int step, int timeout)
         {
             drvs.Add(drv.GetName(), drv);
             drv.Init(step, timeout);
         }
+
         public void AddBlind(Blind blnd)
         {
             if (!Function.Funct.isPresent(blnd.function))
@@ -231,10 +237,6 @@ namespace inout
 
         public void AddVariable(Variable var)
         {
-            if ( var.GetName().Contains("B6IS11LDU") ) {
-                int a = 1;
-                a++;
-            }
             vars.Add(var.GetName(), var);
         }
 

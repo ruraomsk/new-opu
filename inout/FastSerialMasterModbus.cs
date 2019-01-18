@@ -222,6 +222,7 @@ namespace inout
                 return reg.GetAsValue(hregs[reg.Uid]);
             }
         }
+
         public override bool SetValue(string nameValue, string value)
         {
             ModbusRegister reg;
