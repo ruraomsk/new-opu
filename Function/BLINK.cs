@@ -13,9 +13,10 @@ namespace Function
         public override string calculate(List<string> values)
         {
             int inpar = int.Parse(values[0]);
-            bool b = Helper.blink;
+            //bool b = Helper.blink;
+            bool b = false;
             if ((inpar & 3) > 0) b = true;
-            else if ((inpar & 4) > 0) b = false;
+//            else if ((inpar & 4) > 0) b = false;
             return b.ToString();
         }
     }

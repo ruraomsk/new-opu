@@ -11,12 +11,12 @@ namespace builder
 {
     public static class XMLBlinds
     {
-        static public bool Load(string fileXML, ServerOPU server)
+        static public bool Load(string dir, string file, ServerOPU server)
         {
             XmlDocument regXml = new XmlDocument();
             try
             {
-                regXml.Load(fileXML);
+                regXml.Load(dir + file);
             }
             catch (Exception err)
             {
@@ -25,8 +25,8 @@ namespace builder
             }
             foreach (XmlNode n in regXml.SelectNodes("Apax/Blinds"))
             {
-                string load = n.Attributes["load"].Value;
-                XMLBlindFile.Load(load, server);
+                string load = dir+n.Attributes["load"].Value;
+                XMLBlindFile.Load( load, server);
             }
             return true;
         }

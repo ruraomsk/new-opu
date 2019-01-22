@@ -13,22 +13,34 @@ namespace OPU
     {
         static void Main(string[] args)
         {
-            if(args.Length != 1)
+            if(args.Length != 2)
             {
-                Console.WriteLine("Error parametrs:\nusage OPU path_xml_file");
+                Console.WriteLine("Error parametrs:usage OPU path_xml_file\n Need OPU <dir> <left/right>");
+                Console.ReadKey();
                 return;
             }
-            string path = args[0];
-            Console.Write("Loading from " + path + " ");
-            ServerOPU server = XMLServer.Load(path);
+
+            string file = PathHelper.getOPUFileName( args[1] );
+
+            if ( file.Length == 0) {
+                Console.WriteLine("Error parametr: Need OPU <dir> <left/right>");
+                Console.ReadKey();
+                return;
+            }
+
+            string dir = args[0];
+
+            Console.Write("Loading from " + dir + file + " ");
+
+            ServerOPU server = XMLServer.Load(dir, file);
             Console.Write(".");
             Reconnect.StartReconnect(server.stepReconnect);
             Console.Write(".");
-            XMLDevices.Load(path, server);
+            XMLDevices.Load(dir, file, server);
             Console.Write(".");
-            XMLVariables.Load(path, server);
+            XMLVariables.Load(dir, file, server);
             Console.Write(".");
-            XMLBlinds.Load(path, server);
+            XMLBlinds.Load(dir, file, server);
             Console.Write(".");
 
             if (server.GetLoadingError())

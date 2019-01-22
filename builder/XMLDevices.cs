@@ -11,12 +11,12 @@ namespace builder
 {
     public static class XMLDevices
     {
-        static public bool Load(string fileXML, ServerOPU server)
+        static public bool Load(string dir, string file, ServerOPU server)
         {
             XmlDocument regXml = new XmlDocument();
             try
             {
-                regXml.Load(fileXML);
+                regXml.Load(dir + file);
             }
             catch (Exception err)
             {
@@ -30,7 +30,9 @@ namespace builder
                 string step = n.Attributes["step"].Value;
                 string timeout = n.Attributes["timeout"].Value;
                 string type= n.Attributes["type"].Value;
-                string load = n.Attributes["load"].Value;
+
+                string load = dir + n.Attributes["load"].Value;
+
                 if (type.Contains("RezCanal"))
                 {
                     // DubModbus

@@ -76,6 +76,11 @@ namespace inout
             {
                 string[] nameVariable = var.GetName().Split(':');
 
+                if ( var.GetName().Contains("AZCODE") ) {
+                    int a = 0;
+                    a++;
+                }
+
                 if (nameVariable.Length == 1) continue;
 
                 if (!var.LoadFromDevice) continue;
@@ -99,7 +104,7 @@ namespace inout
                 string[] nameVariable = var.GetName().Split(':');
                 if (nameVariable.Length == 1) continue;
 
-                if (nameVariable[1].Equals("FD33"))
+                if (nameVariable[1].Contains("AZCODE"))
                 {
                     int a = 0;
                     a++;
@@ -124,11 +129,10 @@ namespace inout
             Variable var;
             foreach (Blind blnd in blinds)
             {
-                if ( blnd.resultName.Equals("Fout:FD33") ) {
+                if ( blnd.resultName.Contains("AZCODE") ) {
                     int a = 0;
                     a++;
                 }
-
 
                 List<string> pars = new List<string>();
                 foreach (string str in blnd.paramNames)

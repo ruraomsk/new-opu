@@ -8,10 +8,15 @@ namespace Function
         static function[] nameFunction = {
             new Not(),
             new AND(),
+
+            new ANDINT(),
             new OR(),
+            new ORINT(),
             //new SUM(),
+
             new SET(),
             new DATATIME(),
+
             //new intCONV(),
             //new boolCONV(),
 
@@ -51,7 +56,9 @@ namespace Function
         {
             for (int i = 0; i < nameFunction.Length; i++)
             {
-                if (nameFunction[i].name.Equals(namefunc)) return nameFunction[i].calculate(param);
+                if (nameFunction[i].name.Equals(namefunc)) {
+                    return nameFunction[i].calculate(param);
+                }
             }
             return "0";
         }

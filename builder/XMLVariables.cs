@@ -11,12 +11,12 @@ namespace builder
 {
     public static class XMLVariables
     {
-        static public bool Load(string fileXML, ServerOPU server)
+        static public bool Load(string dir, string file, ServerOPU server)
         {
             XmlDocument regXml = new XmlDocument();
             try
             {
-                regXml.Load(fileXML);
+                regXml.Load(dir + file);
             }
             catch (Exception err)
             {

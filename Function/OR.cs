@@ -24,11 +24,12 @@ namespace Function
             return b.ToString();
         }
     }
-    class ORI : function
+
+    class ORINT : function
     {
-        public ORI()
+        public ORINT()
         {
-            name = "ORI";
+            name = "ORINT";
             description = "Логическое OR над целыми числами";
         }
 

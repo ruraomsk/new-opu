@@ -29,6 +29,7 @@ namespace inout
                 modbuses[i] = new ModbusTCPMaster(name + "_"+i.ToString(), "Канал #" + i.ToString() + " " + description, regsModbus,ips[i],port);
             }
         }
+
         public override string GetValue(string nameValue)
         {
             lastOperation = DateTime.MinValue;
@@ -43,6 +44,7 @@ namespace inout
             if (where < 0) return "0";
             return modbuses[where].GetValue(nameValue);
         }
+
         public override bool SetValue(string nameValue, string value)
         {
             bool result = false;
@@ -53,6 +55,7 @@ namespace inout
             }
             return result;
         }
+
         public override void Init(int step, int timeout)
         {
             this.stepTime = step;
@@ -62,6 +65,7 @@ namespace inout
                 master.Init(step, timeout);
             }
         }
+
         public override void Start()
         {
             foreach (ModbusTCPMaster master in modbuses)
@@ -70,6 +74,7 @@ namespace inout
             }
             Connect = true;
         }
+
         public override void Reconect()
         {
             foreach (ModbusTCPMaster master in modbuses)
@@ -85,19 +90,23 @@ namespace inout
             }
             Connect = false;
         }
+
         public override string Status()
         {
             return "Устройство " + name + ":" + description + " " + (IsConnected() ? "запущено." : "остановлено.")
         + "Последняя операция " + lastOperation.ToLongTimeString();
         }
+
         public override string[] ColumnsName()
         {
             return modbuses[0].ColumnsName();
         }
+
         public override int RowsCount()
         {
             return modbuses[0].RowsCount();
         }
+
         public override string[] Row(int row)
         {
             lastOperation = DateTime.MinValue;

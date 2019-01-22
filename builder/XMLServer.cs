@@ -10,12 +10,12 @@ namespace builder
 {
     public static class XMLServer
     {
-        static public ServerOPU Load(string fileXML)
+        static public ServerOPU Load(string dir, string file)
         {
             XmlDocument regXml = new XmlDocument();
             try
             {
-                regXml.Load(fileXML);
+                regXml.Load(dir + file);
             }
             catch (Exception err)
             {

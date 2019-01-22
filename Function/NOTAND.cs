@@ -17,10 +17,11 @@ namespace Function
             bool result = Helper.ReadAsBool(values[0]);
             foreach (string val in values.Skip(1)) {
 
-//                bool b = bool.Parse(val);
-                bool b = Helper.ReadAsBool( val );
-                result = !(result & b);
+                bool b = bool.Parse(val);
+//                bool b = Helper.ReadAsBool( val );
+                result &= b;
             }
+            result = !result;
             return result.ToString();
         }
     }
