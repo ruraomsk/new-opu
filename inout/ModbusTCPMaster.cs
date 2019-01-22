@@ -46,7 +46,7 @@ namespace inout
             {
                 if (!Connect)
                 {
-                    return true;
+                    return false;
                 }
 
                 inque.Enqueue(new ModbusRegisterWithValue(reg, value));
@@ -62,12 +62,7 @@ namespace inout
                 tcpClient = new TcpClient();
                 if (!tcpClient.ConnectAsync(ip, port).Wait(1000))
                 {
-                    Log.Info(ClassName, "Устройство " + name + " не запущено.");
-                    tcpClient = null;
-                    drvThr = null;
-                    Connect = false;
-                    master = null;
-                    return;
+                    throw new Exception("!tcpClient.ConnectAsync error");
                 }
                 master = ModbusIpMaster.CreateIp(tcpClient);
                 master.Transport.ReadTimeout = timeout;
@@ -75,8 +70,12 @@ namespace inout
                 //                master.Transport.Retries = 3;
                 master.Transport.Retries = 1;
                 drvThr = new Thread(this.Run);
+
+
+                Connect = true;
                 drvThr.Start();
                 Reconnect.AddDriver(name, this);
+
                 Log.Info(ClassName, "Устройство " + name + " запущено.");
 
             }
@@ -119,7 +118,7 @@ namespace inout
             Log.Info(ClassName, "Устройство " + name + " перезапускается.");
             Stop();
             Start();
-            Log.Info(ClassName, "Устройство " + name + " перезапущенно.");
+//            Log.Info(ClassName, "Устройство " + name + " перезапущенно.");
         }
         public override string Status()
         {

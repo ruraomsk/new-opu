@@ -100,8 +100,10 @@ namespace inout
                 serialPort.WriteTimeout = timeout;
                 serialPort.Open();
 
+                Connect = true;
                 drvThr = new Thread(this.Run);
                 drvThr.Start();
+
                 Log.Info(ClassName, "Устройство " + name + " запущено.");
             }
             catch (Exception ex)
@@ -271,7 +273,7 @@ namespace inout
             Log.Info(ClassName, "Устройство " + name + " перезапускается.");
             Stop();
             Start();
-            Log.Info(ClassName, "Устройство " + name + " перезапущенно.");
+//            Log.Info(ClassName, "Устройство " + name + " перезапущенно.");
         }
 
         public override string Status()
