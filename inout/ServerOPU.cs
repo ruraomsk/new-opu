@@ -56,6 +56,9 @@ namespace inout
             }
         }
 
+//        private const string DEBUG_VAR = "L22_2L";
+        private const string DEBUG_VAR = "A1VS01IDU";
+
         public void PrintVarialble()
         {
             List<Variable> listVars = vars.Values.ToList();
@@ -76,7 +79,7 @@ namespace inout
             {
                 string[] nameVariable = var.GetName().Split(':');
 
-                if ( var.GetName().Contains("AZCODE") ) {
+                if ( var.GetName().Contains(DEBUG_VAR) ) {
                     int a = 0;
                     a++;
                 }
@@ -104,7 +107,7 @@ namespace inout
                 string[] nameVariable = var.GetName().Split(':');
                 if (nameVariable.Length == 1) continue;
 
-                if (nameVariable[1].Contains("AZCODE"))
+                if (nameVariable[1].Contains(DEBUG_VAR) )
                 {
                     int a = 0;
                     a++;
@@ -129,7 +132,7 @@ namespace inout
             Variable var;
             foreach (Blind blnd in blinds)
             {
-                if ( blnd.resultName.Contains("AZCODE") ) {
+                if ( blnd.resultName.Contains(DEBUG_VAR) ) {
                     int a = 0;
                     a++;
                 }

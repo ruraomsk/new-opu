@@ -55,7 +55,10 @@ namespace Function
 
         public override string calculate(List<string> values)
         {
-            return (Helper.ReadAsDouble(values[1]) < Helper.ReadAsDouble(values[2])) ? Helper.blink.ToString() : false.ToString();
+            string blink = Helper.blink.ToString();
+//            string blink = Helper.ReadAsBool(values[0]).ToString();
+
+            return (Helper.ReadAsDouble(values[1]) < Helper.ReadAsDouble(values[2])) ? blink : false.ToString();
         }
     }
     class BLINKGT : function

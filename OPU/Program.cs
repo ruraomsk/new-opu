@@ -61,11 +61,9 @@ namespace OPU
 
             server.PrintVarialble();
 
-
             bool Connect = true;
             while (Connect)
             {
-
                 DateTime tm = DateTime.Now;
 
                 server.LoadVariablesFromDevices();

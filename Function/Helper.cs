@@ -60,8 +60,12 @@ namespace Function
               //
                 while (true)
                 {
+                    /*
                     if (infloat < 1000.0f) { sres = infloat.ToString("000.00"); break; }
                     if (infloat < 10000.0f) { sres = infloat.ToString("0000.0"); break; }   // исправлено заполнение пробелами
+                    */
+                    if (infloat < 1000.0f) { sres = infloat.ToString("00.000"); break; }
+                    if (infloat < 10000.0f) { sres = infloat.ToString("000.00"); break; }   
                     sres = infloat.ToString("00000");
                     break;
                 }
