@@ -15,12 +15,14 @@ namespace Function
             string[] result = value.Split(delimiterChars);
             return int.Parse(result[0]);
         }
+
         static public double ReadAsDouble(string value)
         {
             string[] result = value.Split(delimiterChars);
             if(result.Length==1) return double.Parse(result[0]+",0");
             return double.Parse(result[0]+","+result[1]);
         }
+
         static public bool ReadAsBool(string value)
         {
             bool result;
@@ -39,6 +41,7 @@ namespace Function
             }
             return result;
         }
+
         static public int[] FromStringToIntArray(string value)
         {
             string[] str = value.Split(' ');
@@ -111,18 +114,43 @@ namespace Function
             rez = upak(rbyte, blink);
             return ArrayToString(rez);
         }
+
         static public string outInteger(int inInt, int len, bool blink)
         {
             ushort[] rez;
             byte[] rbyte;
             string sres = "0";
+
+            switch ( len ) {
+                case 1:
+                    sres = inInt.ToString("0");
+                    break;
+                case 2:
+                    sres = inInt.ToString("00");
+                    break;
+
+                case 5:
+                    sres = inInt.ToString("00000");
+                    break;
+
+                default:
+                    throw new Exception("Undefined length in outInteger");
+                    
+                    
+                    break;
+
+
+            }
+            /*
             if (len == 5) sres = inInt.ToString("00000");
             if (len == 2) sres = inInt.ToString("00");
             if (len == 1) sres = inInt.ToString("0");
+            */
             rbyte = convertToDisplay(sres);
             rez = upak(rbyte, blink);
             return ArrayToString(rez);
         }
+
         static public string outTimer(int thr, int tmm, int tsec)
         {
             ushort[] rez;

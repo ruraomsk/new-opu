@@ -22,7 +22,7 @@ namespace OPU
 
             string file = PathHelper.getOPUFileName( args[1] );
 
-            if ( file.Length == 0) {
+            if ( file == null) {
                 Console.WriteLine("Error parametr: Need OPU <dir> <left/right>");
                 Console.ReadKey();
                 return;

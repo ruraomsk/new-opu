@@ -4,6 +4,15 @@ namespace Function
 {
     class BLINK : function
     {
+        public static bool isBlinking(int input) {
+            bool result = Helper.blink;
+
+            if ((input & 3) > 0) result = true;
+            if ((input & 4) > 0) result = false;
+
+            return result;
+        } 
+
         public BLINK()
         {
             name = "BLINK";
@@ -13,11 +22,14 @@ namespace Function
         public override string calculate(List<string> values)
         {
             int inpar = int.Parse(values[0]);
+            /*
             //bool b = Helper.blink;
             bool b = false;
             if ((inpar & 3) > 0) b = true;
 //            else if ((inpar & 4) > 0) b = false;
-            return b.ToString();
+
+    */
+            return isBlinking(inpar).ToString();
         }
     }
     class BLINKINT : function
@@ -55,10 +67,17 @@ namespace Function
 
         public override string calculate(List<string> values)
         {
-            string blink = Helper.blink.ToString();
-//            string blink = Helper.ReadAsBool(values[0]).ToString();
+            bool result = false;
 
-            return (Helper.ReadAsDouble(values[1]) < Helper.ReadAsDouble(values[2])) ? blink : false.ToString();
+            if (Helper.ReadAsDouble(values[1]) < Helper.ReadAsDouble(values[2])) {
+                int inpar = int.Parse(values[0]);
+                result = BLINK.isBlinking(inpar);
+            }
+
+            //            string blink = Helper.blink.ToString();
+            //            string blink = Helper.ReadAsBool(values[0]).ToString();
+            //            return (  (Helper.ReadAsDouble(values[1]) < Helper.ReadAsDouble(values[2])  ) ? BLINK.isBlinking(int.Parse(values[0])).ToString() : false.ToString();
+            return result.ToString() ;
         }
     }
     class BLINKGT : function

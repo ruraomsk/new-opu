@@ -57,7 +57,7 @@ namespace inout
         }
 
 //        private const string DEBUG_VAR = "L22_2L";
-        private const string DEBUG_VAR = "A1VS01IDU";
+        private const string DEBUG_VAR = "L43_4L";
 
         public void PrintVarialble()
         {
