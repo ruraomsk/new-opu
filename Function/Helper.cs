@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace Function
 {
@@ -77,12 +78,15 @@ namespace Function
 
         private static string ArrayToString(ushort[] rez)
         {
-            string result = "";
+            StringBuilder builder = new StringBuilder("");
+
             foreach (ushort r in rez)
             {
-                result += r.ToString() + " ";
+                builder.Append(r.ToString());
+                builder.Append(" ");
             }
-            return result;
+            builder.Length--;
+            return builder.ToString();
         }
 
         static public string outFloatLong(float infloat, bool blink)
