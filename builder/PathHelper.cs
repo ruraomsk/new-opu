@@ -26,7 +26,7 @@ namespace builder
             else if (name.ToLower().Equals(RIGHT_OPU_NAME) ) {
                 return RIGHT_OPU_FILE;
             }
-            return null;
+            return LEFT_OPU_NAME;
         }
     }
 }
