@@ -15,14 +15,12 @@ namespace OPU
         {
             if(args.Length != 2)
             {
-                Console.WriteLine("Error parametrs:usage OPU path_xml_file\n Need OPU <dir> <left/right>");
-                Console.ReadKey();
-                return;
+                Console.WriteLine("Error parametrs:usage OPU path_xml_file\n Need OPU <left/right> <dir>");
+                Console.WriteLine("Using default params");
             }
 
-            string file = PathHelper.getOPUFileName( args[1] );
-
-            string dir = args[0];
+            string file = (args.Length < 1) ? PathHelper.getDefaultOPUName() : PathHelper.getOPUFileName(args[0]);
+            string dir = (args.Length < 2) ? PathHelper.getDefaultPath() : args[1];
 
             Console.Write("Loading from " + dir + file + " ");
 
