@@ -90,9 +90,20 @@ namespace Function
 
         public override string calculate(List<string> values)
         {
+            bool result = false;
+            if (Helper.ReadAsDouble(values[1]) > Helper.ReadAsDouble(values[2]))
+            {
+                int inpar = int.Parse(values[0]);
+                result = BLINK.isBlinking(inpar);
+            }
+
+            /*
             double p1 = Helper.ReadAsDouble(values[1]);
             float p2 = float.Parse(values[2]);
             return (Helper.ReadAsDouble(values[1]) > Helper.ReadAsDouble(values[1])) ? Helper.blink.ToString() : false.ToString();
+    */
+            return result.ToString();
+
         }
     }
 }
