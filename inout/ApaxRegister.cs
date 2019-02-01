@@ -25,14 +25,18 @@ namespace inout
         {
             return Util.TYPEVAR.BOOLEAN;
         }
-            public string GetAsBool(ref bool[] vs)
+
+        public string GetAsBool(ref bool[] vs)
         {
-            string result = "";
+            StringBuilder builder = new StringBuilder("");
             for (int i = 0; i < size; i++)
             {
-                result += vs[(address + i)+(slot*Util.MaxChanal)].ToString() + " ";
+                if ( i > 0 ) {
+                    builder.Append(" ");
+                }
+                builder.Append(vs[(address + i) + (slot * Util.MaxChanal)].ToString());
             }
-            return result;
+            return builder.ToString();
         }
         public void SetAsBool(ref bool[] vs,string value)
         {
