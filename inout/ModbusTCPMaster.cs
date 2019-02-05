@@ -134,13 +134,15 @@ namespace inout
             }
             return false;
         }
+
         private bool IsNewHR(ushort[] checkValue, int address) {
+            
             for (int i = 0; i < checkValue.Length; i++) {
                 if (hr[address + i] != hr[i]) {
                     return true;
                 }
             }
-            return false;
+            return true;
         }
 
         override public void Run()
