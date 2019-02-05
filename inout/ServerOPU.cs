@@ -57,7 +57,7 @@ namespace inout
         }
 
 //        private const string DEBUG_VAR = "L22_2L";
-        private const string DEBUG_VAR = "L43_4L";
+        private const string DEBUG_VAR = "R0MW13IP1";
 
         public void PrintVarialble()
         {
@@ -79,7 +79,7 @@ namespace inout
             {
                 string[] nameVariable = var.GetName().Split(':');
 
-                if ( var.GetName().Contains(DEBUG_VAR) ) {
+                if ( var.GetName().Contains("F7_2L") ) {
                     int a = 0;
                     a++;
                 }
@@ -94,8 +94,9 @@ namespace inout
                     Log.Fatal(ClassName, "Нет такого устройства " + nameVariable[0]);
                     continue;
                 }
+                string valueVariable = drv.GetValue(nameVariable[1]);
 
-                 var.SetVarValue(drv.GetValue(nameVariable[1]));
+                 var.SetVarValue(valueVariable);
             }
         }
 
@@ -121,7 +122,9 @@ namespace inout
                     Log.Fatal(ClassName, "Нет такого устройства " + nameVariable[0]);
                     continue;
                 }
-                drv.SetValue(nameVariable[1], var.GetVarValue());
+                string valueVariable = var.GetVarValue();
+
+                drv.SetValue(nameVariable[1], valueVariable);
                 var.NewCycle();
             }
 
@@ -132,7 +135,7 @@ namespace inout
             Variable var;
             foreach (Blind blnd in blinds)
             {
-                if ( blnd.resultName.Contains(DEBUG_VAR) ) {
+                if ( blnd.resultName.Contains(DEBUG_VAR) || blnd.resultName.Contains("F7_2L") ) {
                     int a = 0;
                     a++;
                 }
@@ -258,11 +261,9 @@ namespace inout
         }
         public List<Variable> ListAllVariables()
         {
-            List<Variable> result = new List<Variable>(vars.Values.Count);
-            foreach (Variable var in vars.Values)
-            {
-                result.Add(var);
-            }
+            //            List<Variable> result = new List<Variable>(vars.Values.Count);
+            List<Variable> result = vars.Values.ToList<Variable>();
+
             return result;
         }
         public Dictionary<string, Driver> ListAllDevices()
