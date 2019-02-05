@@ -15,7 +15,7 @@ namespace builder
             XmlDocument regXml = new XmlDocument();
             try
             {
-                regXml.Load(dir + file);
+                 regXml.Load(dir + file);
             }
             catch (Exception err)
             {

@@ -22,7 +22,7 @@ namespace Function
             int k = 4;
             for(int i = 0; i < values.Count; i++)
             {
-                if(values.Count==5 && i == 4)
+                if (values.Count==5 && i == 4)
                 {
                     res[k--] = bool.Parse(values[i]) ? 1 : 0;
                     continue;
