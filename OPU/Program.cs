@@ -57,10 +57,12 @@ namespace OPU
             while (Connect)
             {
                 DateTime tm = DateTime.Now;
-
-                server.LoadVariablesFromDevices();
-                server.MakeOneStep();
-                server.SaveVariablesToDevices();
+                lock ( Helper.mainmutex )
+                {
+                    server.LoadVariablesFromDevices();
+                    server.MakeOneStep();
+                    server.SaveVariablesToDevices();
+                }
                 Helper.blink = !Helper.blink;
                 DateTime lastOperation = DateTime.Now;
                 long untilTime = (lastOperation.Ticks - tm.Ticks) / 10000L;

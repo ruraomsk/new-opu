@@ -9,6 +9,7 @@ namespace Function
         static readonly char[] delimiterChars = { '.', ',' };
 
         static public bool blink=false;
+        static public object mainmutex = new object();
 
         static public int ReadAsInt(string value)
         {

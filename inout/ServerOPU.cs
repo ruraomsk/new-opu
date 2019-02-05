@@ -253,17 +253,23 @@ namespace inout
         public List<string> ListAllBlaind()
         {
             List<string> result = new List<string>();
-            foreach(Blind blnd in blinds)
-            {
-                result.Add(blnd.ToString());
+
+            lock ( Helper.mainmutex ) {
+                foreach (Blind blnd in blinds)
+                {
+                    result.Add(blnd.ToString());
+                }
             }
             return result;
         }
+
         public List<Variable> ListAllVariables()
         {
             //            List<Variable> result = new List<Variable>(vars.Values.Count);
-            List<Variable> result = vars.Values.ToList<Variable>();
-
+            List<Variable> result;
+            lock ( Helper.mainmutex ) {
+                result = vars.Values.ToList<Variable>();
+            }
             return result;
         }
         public Dictionary<string, Driver> ListAllDevices()
