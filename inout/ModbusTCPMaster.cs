@@ -42,13 +42,8 @@ namespace inout
         public override bool SetValue(string nameValue, string value)
         {
             ModbusRegister reg;
-            if (base.TryGetValue(nameValue, out reg))
+            if (base.TryGetValue(nameValue, out reg) && Connect)
             {
-                if (!Connect)
-                {
-                    return false;
-                }
-
                 inque.Enqueue(new ModbusRegisterWithValue(reg, value));
                 return true;
             };
@@ -118,7 +113,6 @@ namespace inout
             Log.Info(ClassName, "Устройство " + name + " перезапускается.");
             Stop();
             Start();
-//            Log.Info(ClassName, "Устройство " + name + " перезапущенно.");
         }
         public override string Status()
         {
@@ -136,13 +130,15 @@ namespace inout
         }
 
         private bool IsNewHR(ushort[] checkValue, int address) {
-            
+            return true;
+            /*
             for (int i = 0; i < checkValue.Length; i++) {
                 if (hr[address + i] != hr[i]) {
                     return true;
                 }
             }
-            return true;
+            return false;
+            */
         }
 
         override public void Run()
