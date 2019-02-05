@@ -85,7 +85,8 @@ namespace AgentServer
             result += "\n\"Messages\": [ \n";
             foreach (string item in messages)
             {
-                result += "\t\"" + item + "\",\n";
+                //Поправил двойную кааычку!!!!!!!!!!!!!!!!!!!!!!!!!
+                result += "\t\"" + item.Replace("\"", "`") + "\",\n";
             }
             result += "]\n}\n";
             return result;
