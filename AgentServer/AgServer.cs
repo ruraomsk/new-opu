@@ -48,7 +48,13 @@ namespace AgentServer
                 try
                 {
                     TcpClient clientTcp = listner.AcceptTcpClient();
-                    clients.Add(new Client(server, clientTcp));
+                    
+
+                    Client client = new Client(server, clientTcp);
+                    client.Start();             
+
+                    clients.Add(client);
+
                     Log.Info("AgServer", " Добавлен клиент " + Convert.ToString(((System.Net.IPEndPoint)clientTcp.Client.RemoteEndPoint).Address));
                 } catch (Exception ex)
                 {
