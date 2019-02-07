@@ -25,6 +25,8 @@ namespace Function
             //new FORMAT() ,
             new FORIF(),
             new BLINK(),
+            new BLINKINT(),
+
             new SWITCH(),
             new FloatStr(),
             new IntStr(),
