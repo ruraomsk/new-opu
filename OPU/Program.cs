@@ -42,6 +42,8 @@ namespace OPU
             }
 
             AgServer agserv = new AgServer(server, 8081);
+            agserv.Start();
+
             Console.Write(".");
 
             server.StartAllDevices();

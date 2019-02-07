@@ -24,9 +24,6 @@ namespace AgentServer
             this.server = server;
             this.port = port;
             clients = new List<Client>();
-            thread = new Thread(this.Run);
-            thread.Start();
-
         }
         public void Stop()
         {
@@ -39,7 +36,13 @@ namespace AgentServer
             thread.Abort();
             thread.Join();
         }
-        public void Run()
+
+        public void Start() {
+            thread = new Thread(this.Run);
+            thread.Start();
+        }
+
+        private void Run()
         {
             listner = new TcpListener(IPAddress.Any, port);
             listner.Start();
