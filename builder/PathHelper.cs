@@ -8,6 +8,8 @@ namespace builder
 {
     public class PathHelper
     {
+        private const string DEFAULT_DIR = @"\\192.168.10.41\newOPU\XML\";
+
         private const string LEFT_OPU_NAME = "left";
         private const string RIGHT_OPU_NAME = "right";
 
@@ -19,7 +21,7 @@ namespace builder
         public const int RIGHT_OPU = 1;
 
         public static string getDefaultPath() {
-            return @"\\192.168.10.41\newOPU\XML\";
+            return DEFAULT_DIR;
         }
 
         public static string getDefaultOPUName() {
