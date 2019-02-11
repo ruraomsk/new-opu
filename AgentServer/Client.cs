@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Net.Sockets;
+using System.Net;
 using System.Threading;
 using inout;
 using loggers;
@@ -38,8 +39,9 @@ namespace AgentServer
             client.Close();
             thread.Abort();
             thread.Join();
+            Log.Debug("Client", "Client stopped!");
         }
- 
+
         private void Run()
         {
             byte[] buffer = new byte[1024];
@@ -69,9 +71,15 @@ namespace AgentServer
                   
                 Parser parser = new Parser(request, server);
                 byte[] result = Encoding.UTF8.GetBytes(parser.GetResponse()+endString);
-                stream.Write(result,0,result.Length);
+
+                try {
+                    stream.Write(result, 0, result.Length);
+                }
+                catch (Exception e) {
+                    Log.Info("AgentServer", e.ToString());
+                    Connect = false;
+                }
             }
-            Log.Debug("Client", "Client stopped!");
             Stop();
         }
     }

@@ -51,7 +51,6 @@ namespace AgentServer
                 try
                 {
                     TcpClient clientTcp = listner.AcceptTcpClient();
-                    
 
                     Client client = new Client(server, clientTcp);
                     client.Start();             
