@@ -42,10 +42,18 @@ namespace AgentServer
             thread.Start();
         }
 
-        private void Run()
-        {
+        private void startListener() {
             listner = new TcpListener(IPAddress.Any, port);
             listner.Start();
+
+            Connect = true;
+
+            Log.Info("AgServer", "Started/restarted Ad Server");
+        }
+
+        private void Run()
+        {
+            startListener();
             while (Connect)
             {
                 try
@@ -61,7 +69,8 @@ namespace AgentServer
                 } catch (Exception ex)
                 {
                     Log.Info("AgServer", " Ошибка " + ex.Message);
-                    return;
+                    Thread.Sleep(1000);
+                    startListener();
                 }
             }
         }
