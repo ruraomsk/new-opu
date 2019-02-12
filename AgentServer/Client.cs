@@ -58,7 +58,7 @@ namespace AgentServer
                     }
                 }
                 catch (Exception e) {
-                    Log.Info ("AgentServer", e.ToString());
+                    Log.Info ("AgentServer Client", "Ошибка чтения из потока: " + e.ToString());
                     Connect = false;
                 }
 
@@ -76,7 +76,7 @@ namespace AgentServer
                     stream.Write(result, 0, result.Length);
                 }
                 catch (Exception e) {
-                    Log.Info("AgentServer", e.ToString());
+                    Log.Info("AgentServer Client", "Ошибка записи в поток: " + e.ToString());
                     Connect = false;
                 }
             }
