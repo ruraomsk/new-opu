@@ -14,7 +14,7 @@ namespace AgentServer
     {
         ServerOPU server;
         int port;
-        TcpListener listner;
+        TcpListener listner=null;
         Thread thread;
         List<Client> clients;
         bool Connect = true;
@@ -43,7 +43,9 @@ namespace AgentServer
         }
 
         private void startListener() {
-            listner = new TcpListener(IPAddress.Any, port);
+            if (listner == null) {
+                listner = new TcpListener(IPAddress.Any, port);
+            }
             listner.Start();
 
             Connect = true;
@@ -69,6 +71,7 @@ namespace AgentServer
                 } catch (Exception ex)
                 {
                     Log.Info("AgServer", " Ошибка " + ex.Message);
+                    listner.Stop();
                     Thread.Sleep(1000);
                     startListener();
                 }
