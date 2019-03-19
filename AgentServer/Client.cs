@@ -58,7 +58,8 @@ namespace AgentServer
                     }
                 }
                 catch (Exception e) {
-                    Log.Info ("AgentServer Client", "Ошибка чтения из потока: " + e.ToString());
+//                    Log.Info ("AgentServer Client", "Ошибка чтения из потока: " + e.ToString());
+                    Log.Info ("AgentServer Client", "Ошибка чтения из потока: вероятно, удаленный хост принудительно разорвал соединения.");
                     Connect = false;
                 }
 
@@ -76,7 +77,8 @@ namespace AgentServer
                     stream.Write(result, 0, result.Length);
                 }
                 catch (Exception e) {
-                    Log.Info("AgentServer Client", "Ошибка записи в поток: " + e.ToString());
+//                    Log.Info("AgentServer Client", "Ошибка записи в поток: " + e.ToString());
+                    Log.Info("AgentServer Client", "Ошибка записи в поток: вероятно, удаленный хост принудительно разорвал соединения.");
                     Connect = false;
                 }
             }
