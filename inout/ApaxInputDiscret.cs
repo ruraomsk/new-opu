@@ -68,7 +68,7 @@ namespace inout
                     bool[] value;
                     if(!adamCtrl.DigitalInput().GetValues(slot,Util.MaxChanal,out value))
                     {
-                        Log.Error(ClassName, "Слот " + slot.ToString() + "Ошибка ввода");
+                        Log.Error(ClassName, "Слот " + slot.ToString() + ". Ошибка ввода");
                         continue;
                     }
                     Array.Copy(value, 0,buffer, index, value.Length);
