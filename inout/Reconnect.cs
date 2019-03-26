@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 using System.Collections.Concurrent;
 using loggers;
@@ -19,6 +15,7 @@ namespace inout
         private static Thread drvThr;
         private static bool Connect = true;
         static private Driver[] drvs;
+
         public static void StartReconnect(int steptime)
         {
             drivers = new ConcurrentDictionary<string, Driver>();
@@ -28,18 +25,21 @@ namespace inout
             Log.Info(ClassName, "Процесс " + name + " запущен.");
 
         }
+
         public static void Stop()
         {
             drvThr.Abort();
             drvThr.Join();
             Log.Info(ClassName, "Процесс " + name + " остановлен управлением.");
         }
+
         static public void AddDriver(string name,Driver drv)
         {
             drivers[name] = drv;
             drvs= new Driver[drivers.Count];
             drivers.Values.CopyTo(drvs, 0);
         }
+
         static public void Run()
         {
             while (Connect)
@@ -47,11 +47,9 @@ namespace inout
                 DateTime tm = DateTime.Now;
                 foreach(Driver drv in drivers.Values)
                 {
-                    if (!drv.IsConnected())
-                    {
                         drv.Reconect();
-                    }
                 }
+
                 lastOperation = DateTime.Now;
                 long untilTime = (lastOperation.Ticks - tm.Ticks) / 10000L;
                 if ((stepTime - untilTime) < 0)
@@ -75,11 +73,7 @@ namespace inout
             }
         }
 
-        public static string[] ColumnsName()
-        {
-            string[] result = {"Имя","Описание","Состояние" };
-            return result;
-        }
+        public static string[] ColumnsName() => new string[]{"Имя","Описание","Состояние" };
 
         public static string[] Row(int row)
         {
@@ -92,9 +86,6 @@ namespace inout
 
         }
         public static string Status() => "Процесс " + name + ": " + description + " " + (Connect ? " работает" : " остановлен");
-        public static int RowsCount()
-        {
-            return drvs.Length;
-        }
+        public static int RowsCount() => drvs.Length;
     }
 }
