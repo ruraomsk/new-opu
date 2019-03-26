@@ -8,18 +8,16 @@ namespace inout
 {
     public class ApaxInputDiscret : ApaxCommon
     {
-//        private DateTime lastOperation = DateTime.MinValue;
         private long stepTime;
         private int timeout;
         private Thread drvThr;
-        //private ConcurrentQueue<ApaxRegisterWithValue> inque;
-        private const string ClassName = "ApaxInputDiscret";
-
 
         public ApaxInputDiscret(string name, string description, Dictionary<string, ApaxRegister> regsApax)
             :base(name, description, regsApax)
         {
+            ClassName = "ApaxInputDiscret";
         }
+
         public override void Init(int step, int timeout)
         {
             this.timeout = timeout;
@@ -45,13 +43,7 @@ namespace inout
             drvThr.Join();
             Log.Info(ClassName, "Устройство " + name + " остановлено управлением.");
         }
-        public override void Reconect()
-        {
-            Log.Info(ClassName, "Устройство " + name + " перезапускается.");
-            Stop();
-            Start();
-            Log.Info(ClassName, "Устройство " + name + " перезапущенно.");
-        }
+
         public override string Status()
         {
             return "Устройство " + name + ":" + description + " " + (IsConnected() ? "запущено." : "остановлено.")
@@ -100,6 +92,7 @@ namespace inout
 
             }
         }
+
         public override string[] ColumnsName()
         {
             ApaxRegister[] regs = new ApaxRegister[regsApax.Count];

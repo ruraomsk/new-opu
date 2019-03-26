@@ -22,6 +22,7 @@ namespace inout
             this.ips = ips;
             this.port = port;
             typeDriver = "MODBUS";
+            ClassName = "ModbusTCPMaster";
 
             modbuses = new ModbusTCPMaster[ips.Length];
             for(int i=0;i<ips.Length;i++)

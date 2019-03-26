@@ -125,13 +125,7 @@ namespace inout
             //slaveTcpListener.Server.Disconnect(true);
             Log.Info(ClassName, "Устройство " + name + " остановлено управлением.");
         }
-        public override void Reconect()
-        {
-            Log.Info(ClassName, "Устройство " + name + " перезапускается.");
-            Stop();
-            Start();
-            Log.Info(ClassName, "Устройство " + name + " перезапущенно.");
-        }
+
         public override string Status()
         {
             return "Устройство " + name + ":" + description + " " + (IsConnected() ? "запущено." : "остановлено.")

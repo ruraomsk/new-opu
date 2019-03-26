@@ -39,7 +39,7 @@ namespace inout
         private int timeout;
         private long stepTime;
         private Thread drvThr;
-        private const string ClassName = "FastSerialMasterModbus";
+
         private ConcurrentQueue<ModbusRegisterWithValue> inque;
         private DateTime lastOperation=DateTime.MinValue;
         private ConcurrentDictionary<int, ushort[]> hregs;
@@ -52,6 +52,7 @@ namespace inout
             this.regsModbus = regsModbus;
             this.param = param;
             typeDriver = "MODBUS";
+            ClassName = "FastSerialMasterModbus";
             lastOperation = DateTime.MinValue;
             inque = new ConcurrentQueue<ModbusRegisterWithValue>();
             hregs = new ConcurrentDictionary<int, ushort[]>();
@@ -112,6 +113,7 @@ namespace inout
                 Connect = false;
             }
         }
+
         public override void Stop()
         {
             if (Connect)
@@ -126,6 +128,7 @@ namespace inout
                 serialPort = null;
             }
         }
+
         override public void Run()
         {
             while (Connect)
@@ -266,14 +269,6 @@ namespace inout
                 inque.Enqueue(new ModbusRegisterWithValue(reg, value));
             }
             return true;
-        }
-
-        public override void Reconect()
-        {
-            Log.Info(ClassName, "Устройство " + name + " перезапускается.");
-            Stop();
-            Start();
-//            Log.Info(ClassName, "Устройство " + name + " перезапущенно.");
         }
 
         public override string Status()

@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using loggers;
+
 namespace inout
 {
     abstract public class Driver
     {
+        protected string ClassName = "Driver";
+        public string typeDriver = "unknow";
+
         public string name="unknow";
         public string description ="driver not named";
         public bool Connect = true;
-        public string typeDriver = "unknow";
         public virtual void Init(int step,int timeout) { }
         public virtual void Start() { }
         public virtual void Stop() { }
@@ -33,10 +33,15 @@ namespace inout
         public string GetDescription() => description;
 
         public virtual bool IsHaveVariable(string nameValue) => false;
+
         public virtual void Reconect()
         {
-            Stop();
-            Start();
+            if ( !Connect ) {
+                Log.Info(ClassName, "Устройство " + name + " перезапускается.");
+
+                Stop();
+                Start();
+            }
         }
         public virtual string Status() => null;
         public virtual string[] Row(int row) => null;

@@ -11,12 +11,11 @@ namespace inout
         private long stepTime;
         private int timeout;
         private Thread drvThr;
-        //private ConcurrentQueue<ApaxRegisterWithValue> inque;
-        private const string ClassName = "ApaxOutputDiscret";
 
         public ApaxOutputDiscret(string name, string description, Dictionary<string, ApaxRegister> regsApax):
             base(name, description, regsApax)
         {
+            ClassName = "ApaxOutputDiscret";
             for (int i = 0; i < varBuffer.Length; i++) {
                 varBuffer[i] = true;
             }
@@ -49,6 +48,7 @@ namespace inout
             }
             return true;
         }
+
         public override void Stop()
         {
             Connect = false;
@@ -56,13 +56,7 @@ namespace inout
             drvThr.Join();
             Log.Info(ClassName, "Устройство " + name + " остановлено управлением.");
         }
-        public override void Reconect()
-        {
-            Log.Info(ClassName, "Устройство " + name + " перезапускается.");
-            Stop();
-            Start();
-            Log.Info(ClassName, "Устройство " + name + " перезапущенно.");
-        }
+
         public override string Status()
         {
             return "Устройство " + name + ":" + description + " " + (IsConnected() ? "запущено." : "остановлено.")

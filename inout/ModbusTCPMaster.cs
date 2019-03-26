@@ -5,11 +5,11 @@ using System.Net.Sockets;
 using System.Threading;
 using loggers;
 using Modbus.Device;
+
 namespace inout
 {
     public class ModbusTCPMaster : ModbusCommon
     {
-        private const string ClassName = "ModbusTCPMaster";
         private TcpClient tcpClient = null;
         private ModbusIpMaster master = null;
         private Thread drvThr;
@@ -28,6 +28,8 @@ namespace inout
             this.ip = ip;
             this.port = port;
             typeDriver = "MODBUS";
+            ClassName = "ModbusTCPMaster";
+
             // Вычисляем размерности регистров
             inque = new ConcurrentQueue<ModbusRegisterWithValue>();
             lastOperation = DateTime.MinValue;
@@ -108,12 +110,7 @@ namespace inout
             }
             Log.Info(ClassName, "Устройство " + name + " остановлено управлением.");
         }
-        public override void Reconect()
-        {
-            Log.Info(ClassName, "Устройство " + name + " перезапускается.");
-            Stop();
-            Start();
-        }
+
         public override string Status()
         {
             return "Устройство " + name + ":" + description + " " + (IsConnected() ? "запущено." : "остановлено.")
@@ -300,8 +297,7 @@ namespace inout
                 }
             }
         }
-
-
+        
         private void ReadAllIR() {
             if (Connect && lenIrs > 0) {
                 ushort[] r;
