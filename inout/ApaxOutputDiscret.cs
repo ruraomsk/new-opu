@@ -79,7 +79,7 @@ namespace inout
                     index += value.Length;
                     if (!adamCtrl.DigitalOutput().SetValues(slot, value))
                     {
-                        Log.Error(ClassName, "Слот " + slot.ToString() + "Ошибка вывода");
+                        Log.Error(ClassName, "Слот " + slot.ToString() + ". Ошибка вывода");
                         continue;
                     }
                 }
