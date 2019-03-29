@@ -7,8 +7,9 @@ namespace Function
         public static bool isBlinking(int input) {
             bool result = Helper.blink;
 
-            if ((input & 3) > 0) result = true;
-            if ((input & 4) > 0) result = false;
+            if ((input & 8) > 0 ) return Helper.blink;
+            if ((input & 3) > 0) return true;
+            if ((input & 4) > 0) return false;
 
             return result;
         } 
@@ -22,6 +23,9 @@ namespace Function
         public override string calculate(List<string> values)
         {
             int inpar = int.Parse(values[0]);
+
+
+
             /*
             //bool b = Helper.blink;
             bool b = false;
