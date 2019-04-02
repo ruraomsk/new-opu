@@ -10,7 +10,7 @@ namespace inout
 
         public string name="unknow";
         public string description ="driver not named";
-        public bool Connect = true;
+        public bool Connect = false;
         public virtual void Init(int step,int timeout) { }
         public virtual void Start() { }
         public virtual void Stop() { }
