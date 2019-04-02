@@ -56,6 +56,8 @@ namespace inout
         {
             try
             {
+                Reconnect.AddDriver(name, this);
+
                 tcpClient = new TcpClient();
                 if (!tcpClient.ConnectAsync(ip, port).Wait(1000))
                 {
@@ -71,7 +73,6 @@ namespace inout
 
                 Connect = true;
                 drvThr.Start();
-                Reconnect.AddDriver(name, this);
 
                 Log.Info(ClassName, "Устройство " + name + " запущено.");
 
