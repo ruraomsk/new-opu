@@ -15,8 +15,8 @@ namespace OPU
         {
             if(args.Length != 2)
             {
-                Console.WriteLine("Error parametrs:usage OPU path_xml_file\n Need OPU <left/right> <dir>");
-                Console.WriteLine("Using default params");
+                Console.WriteLine("WARNING! OPU has to have next params: newOPU.exe <left/right> <dir>");
+                Console.WriteLine("Now OPU will be use default params");
             }
 
             string file = (args.Length < 1) ? PathHelper.getDefaultOPUName() : PathHelper.getOPUFileName(args[0]);
