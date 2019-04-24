@@ -44,7 +44,7 @@ namespace inout
         public override bool SetValue(string nameValue, string value)
         {
             ModbusRegister reg;
-            if (base.TryGetValue(nameValue, out reg) && Connect)
+            if (Connect && base.TryGetValue(nameValue, out reg))
             {
                 inque.Enqueue(new ModbusRegisterWithValue(reg, value));
                 return true;
