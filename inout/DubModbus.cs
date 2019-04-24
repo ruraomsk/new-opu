@@ -27,18 +27,19 @@ namespace inout
             modbuses = new ModbusTCPMaster[ips.Length];
             for(int i=0;i<ips.Length;i++)
             {
-                modbuses[i] = new ModbusTCPMaster(name + "_"+i.ToString(), "Канал #" + i.ToString() + " " + description, regsModbus,ips[i],port);
+                modbuses[i] = new ModbusTCPMaster(name + "_"+i.ToString(), " Канал #" + i.ToString() + " " + description, regsModbus,ips[i],port);
             }
         }
 
         public override string GetValue(string nameValue)
-        {
+        { 
             lastOperation = DateTime.MinValue;
             int where = -1;
             for (int i = 0; i < modbuses.Length; i++)
             {
                 if (modbuses[i].lastOperation > lastOperation)
                 {
+                    lastOperation = modbuses[i].lastOperation;
                     where = i;
                 }
             }
@@ -51,8 +52,9 @@ namespace inout
             bool result = false;
             foreach (ModbusTCPMaster master in modbuses)
             {
-                if (!master.IsConnected()) continue;
-                result |= master.SetValue(nameValue, value);
+                if (master.IsConnected()) {
+                    result |= master.SetValue(nameValue, value);
+                }
             }
             return result;
         }
