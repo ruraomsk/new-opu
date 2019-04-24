@@ -212,7 +212,7 @@ namespace inout
 
                     long timeReadAll = (lastOperation.Ticks - startReadAll) / 10000L;
 
-                    Log.Warn(ClassName, "Время чтения ALL составило " + timeReadAll.ToString());
+                    Log.Warn(ClassName, "Время чтения всех блоков составило " + timeReadAll.ToString());
 
 
                     long timeReadAllCoils = (timeEndRealAllCoils - startReadAll) / 10000L;
@@ -220,8 +220,7 @@ namespace inout
                     long timeReadAllIR = (timeEndRealAllIR - timeEndRealAllDI) / 10000L;
                     long timeReadAllHR = (lastOperation.Ticks - timeEndRealAllIR) / 10000L;
 
-                    Log.Warn(ClassName, "Время чтения блоков AllCoils == " + timeReadAllCoils.ToString() + " AllDI == " + timeReadAllDI.ToString() + " AllIR == " + timeReadAllIR.ToString()
-                        + " AllHR == " + timeReadAllHR.ToString());
+                    Log.Warn(ClassName, "Время чтения блоков Coil " + timeReadAllCoils.ToString() + " мс. DI " + timeReadAllDI.ToString() + " мс. IR " + timeReadAllIR.ToString() + " мс. HR " + timeReadAllHR.ToString() + " мс.") ;
                 }
                 else
                 {
