@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text;
 
 namespace Function
@@ -17,11 +18,27 @@ namespace Function
             return int.Parse(result[0]);
         }
 
+        /*
         static public double ReadAsDouble(string value)
         {
             string[] result = value.Split(delimiterChars);
-            if(result.Length==1) return double.Parse(result[0]+",0");
-            return double.Parse(result[0]+","+result[1]);
+            if (result.Length == 1)
+            {
+                if (value.Contains("E"))
+                {
+                    return double.Parse(result[0]);
+                }
+                else
+                {
+                    return double.Parse(result[0] + ",0");
+                }
+            }
+            return double.Parse(result[0] + "," + result[1]);
+        }
+        */
+        static public double ReadAsDouble(string value)
+        {
+            return double.Parse( value.Replace(',','.'), CultureInfo.InvariantCulture);
         }
 
         static public bool ReadAsBool(string value)
