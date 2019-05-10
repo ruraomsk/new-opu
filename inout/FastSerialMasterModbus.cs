@@ -40,7 +40,9 @@ namespace inout
         private long stepTime;
         private Thread drvThr;
 
-        private ConcurrentQueue<ModbusRegisterWithValue> inque;
+        //        private ConcurrentQueue<ModbusRegisterWithValue> inque;
+        private ConcurrentDictionary<String, ModbusRegisterWithValue> registers;
+             
         private DateTime lastOperation=DateTime.MinValue;
         private ConcurrentDictionary<int, ushort[]> hregs;
 
@@ -54,7 +56,11 @@ namespace inout
             typeDriver = "MODBUS";
             ClassName = "FastSerialMasterModbus";
             lastOperation = DateTime.MinValue;
-            inque = new ConcurrentQueue<ModbusRegisterWithValue>();
+
+            //            inque = new ConcurrentQueue<ModbusRegisterWithValue>();
+            registers = new ConcurrentDictionary<string, ModbusRegisterWithValue>();
+
+
             hregs = new ConcurrentDictionary<int, ushort[]>();
             base.MakeAllArrays();
             if (lenCoils != 0 || lenDis != 0 || lenIrs != 0)
@@ -131,44 +137,64 @@ namespace inout
 
         override public void Run()
         {
+            long beginTime, endTime, cycleTime;
             while (Connect)
             {
-                DateTime tm = DateTime.Now;
-                while (!inque.IsEmpty)
-                {
-                    ModbusRegisterWithValue mregv;
-                    if (!inque.TryDequeue(out mregv))
-                    {
-                        break;
-                    }
+                Log.Warn(ClassName, "Устройство " + name + ". Количество регистров " + registers.Count.ToString());
+                beginTime = DateTime.Now.Ticks;
 
-                    if (!Connect)
+                if ( Connect ) {
+                    foreach (var unit in registers)
                     {
-                        continue;
-                    }
-
-                    try
-                    {
-                        Connect = sendMessage(mregv.register.Uid, mregv.register.Address,mregv.register.SetAsValue(mregv.Value)); 
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Warn(ClassName, "Устройство " + name + " " + ex.Message);
-                        Connect = false;
+                        ModbusRegisterWithValue mregv = unit.Value;
+                        if ( mregv != null ) {
+                            try
+                            {
+                                Connect = sendMessage(mregv.register.Uid, mregv.register.Address, mregv.register.SetAsValue(mregv.Value));
+                                registers[unit.Key] = null;
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Error(ClassName, "Устройство " + name + " " + ex.Message);
+                                Connect = false;
+                            }
+                        }
                     }
                 }
 
-                lastOperation = DateTime.Now;
-                long untilTime = (lastOperation.Ticks - tm.Ticks) / 10000L;
-                if ((stepTime - untilTime) < 0)
+
+                /*
+
+                while (!inque.IsEmpty)
                 {
-                    Log.Warn(ClassName, "Устройство " + name + " Время цикла превысило шаг и составило " + untilTime.ToString());
+                    ModbusRegisterWithValue mregv;
+
+                    if (Connect && inque.TryDequeue(out mregv))
+                    {
+                        try
+                        {
+                            Connect = sendMessage(mregv.register.Uid, mregv.register.Address,mregv.register.SetAsValue(mregv.Value)); 
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Warn(ClassName, "Устройство " + name + " " + ex.Message);
+                            Connect = false;
+                        }
+                    }
+                }
+                */
+
+                endTime = DateTime.Now.Ticks;
+                cycleTime = (endTime - beginTime) / 10000L;
+                if ((stepTime - cycleTime) < 0)
+                {
+                    Log.Warn(ClassName, "Устройство " + name + " Время цикла превысило шаг и составило " + cycleTime.ToString());
                 }
                 else
                 {
                     try
                     {
-                        Thread.Sleep((int)(stepTime - untilTime));
+                        Thread.Sleep((int)(stepTime - cycleTime));
                     }
                     catch (Exception ex)
                     {
@@ -266,7 +292,9 @@ namespace inout
 
             if (NeedSend)
             {
-                inque.Enqueue(new ModbusRegisterWithValue(reg, value));
+                registers[reg.getStringId] = new ModbusRegisterWithValue(reg, value);
+
+                //inque.Enqueue(new ModbusRegisterWithValue(reg, value));
             }
             return true;
         }
