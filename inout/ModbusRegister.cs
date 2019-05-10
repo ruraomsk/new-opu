@@ -44,6 +44,8 @@ namespace inout
         public int Size { get => size; }
         public int Uid { get => uid; }
 
+        public String getStringId { get => uid.ToString() + ":" + address.ToString(); }
+
         public Util.TYPEVAR GetTypeVar()
         {
             if (type < 2) return Util.TYPEVAR.BOOLEAN;
