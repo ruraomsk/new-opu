@@ -41,7 +41,7 @@ namespace inout
         private Thread drvThr;
 
         //        private ConcurrentQueue<ModbusRegisterWithValue> inque;
-        private ConcurrentDictionary<String, ModbusRegisterWithValue> registers;
+        private ConcurrentDictionary<int, bool> activeRegisters;
              
         private DateTime lastOperation=DateTime.MinValue;
         private ConcurrentDictionary<int, ushort[]> hregs;
@@ -58,7 +58,7 @@ namespace inout
             lastOperation = DateTime.MinValue;
 
             //            inque = new ConcurrentQueue<ModbusRegisterWithValue>();
-            registers = new ConcurrentDictionary<string, ModbusRegisterWithValue>();
+            activeRegisters = new ConcurrentDictionary<int, bool>();
 
 
             hregs = new ConcurrentDictionary<int, ushort[]>();
@@ -140,18 +140,27 @@ namespace inout
             long beginTime, endTime, cycleTime;
             while (Connect)
             {
-                Log.Warn(ClassName, "Устройство " + name + ". Количество регистров " + registers.Count.ToString());
+                //Log.Warn(ClassName, "Устройство " + name + ". Количество регистров " + registers.Count.ToString());
+
                 beginTime = DateTime.Now.Ticks;
 
                 if ( Connect ) {
-                    foreach (var unit in registers)
+                    foreach (var unit in activeRegisters)
                     {
-                        ModbusRegisterWithValue mregv = unit.Value;
-                        if ( mregv != null ) {
+                        int regUid = unit.Key;
+                        bool isActive = unit.Value;
+                        if (isActive )
+                        {
                             try
                             {
-                                Connect = sendMessage(mregv.register.Uid, mregv.register.Address, mregv.register.SetAsValue(mregv.Value));
-                                registers[unit.Key] = null;
+                                ushort[] currentReg=null;
+                                lock (mutex) {
+                                    currentReg = hregs[regUid];
+                                    activeRegisters[regUid] = false;
+                                }
+                                if (currentReg != null ) {
+                                    Connect = SendMessage(regUid, 0, currentReg);
+                               }
                             }
                             catch (Exception ex)
                             {
@@ -210,7 +219,7 @@ namespace inout
             serialPort = null;
         }
 
-        private bool sendMessage(int uid, ushort address, ushort[] value)
+        private bool SendMessage(int uid, ushort address, ushort[] value)
         {
             try
             {
@@ -262,16 +271,19 @@ namespace inout
                 return false;
             }
 
-            bool NeedSend = false;
+//            bool NeedSend = false;
             try
             {
-                ushort[] r = reg.SetAsValue(value);
+                ushort[] r = reg.ConvertToUshorts(value);
                 lock (mutex)
                 {
                     ushort[] hhr = hregs[reg.Uid];
-                    if (!reg.CompareAsUshort(ref hhr, ref r))
+                    
+
+                    if (!reg.CompareAsUshort(ref hhr, ref r, reg.Size ))
                     {
-                        NeedSend = true;
+                        activeRegisters[reg.Uid] = true;
+//                        NeedSend = true;
                         for (int i = 0; i < r.Length; i++)
                         {
                             hhr[reg.Address + i] = r[i];
@@ -285,17 +297,19 @@ namespace inout
                 Log.Warn(ClassName, "Устройство " + name + " " + ex.Message);
                 Connect = false;
             }
+
             if (!Connect)
             {
                 return true;
             }
-
+            /*
             if (NeedSend)
             {
-                registers[reg.getStringId] = new ModbusRegisterWithValue(reg, value);
+                registers[reg.Uid] = value;
 
                 //inque.Enqueue(new ModbusRegisterWithValue(reg, value));
             }
+            */
             return true;
         }
 
