@@ -168,7 +168,7 @@ namespace inout
                                 break;
 
                             case ModbusRegister.TYPE_HR:
-                                ushort[] currentValueHR = mregv.register.SetAsValue(mregv.Value);
+                                ushort[] currentValueHR = mregv.register.ConvertToUshorts(mregv.Value);
                                 if (IsNewHR(currentValueHR, mregv.register.Address)) {
                                     master.WriteMultipleRegisters(mregv.register.Address, currentValueHR);
                                     for (int i = 0; i < currentValueHR.Length; i++) {

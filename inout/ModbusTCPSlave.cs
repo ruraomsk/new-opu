@@ -83,7 +83,7 @@ namespace inout
                             }
                             break;
                         case 2:
-                            ushort[] ri = reg.SetAsValue(value);
+                            ushort[] ri = reg.ConvertToUshorts(value);
                             lock (mutex)
                             {
                                 for (int i = 0; i < ri.Length; i++)
@@ -93,7 +93,7 @@ namespace inout
                             }
                             break;
                         case 3:
-                            ushort[] r = reg.SetAsValue(value);
+                            ushort[] r = reg.ConvertToUshorts(value);
                             lock (mutex)
                             {
                                 for (int i = 0; i < r.Length; i++)
@@ -177,7 +177,7 @@ namespace inout
                                 Connect = true;
                                 break;
                             case 2:
-                                ushort[] ri = mregv.register.SetAsValue(mregv.Value);
+                                ushort[] ri = mregv.register.ConvertToUshorts(mregv.Value);
                                 lock (mutex)
                                 {
                                     for (int i = 0; i < ri.Length; i++)
@@ -188,7 +188,7 @@ namespace inout
                                 Connect = true;
                                 break;
                             case 3:
-                                ushort[] h = mregv.register.SetAsValue(mregv.Value);
+                                ushort[] h = mregv.register.ConvertToUshorts(mregv.Value);
                                 lock (mutex)
                                 {
                                     for (int i = 0; i < h.Length; i++)

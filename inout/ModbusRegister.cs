@@ -44,8 +44,6 @@ namespace inout
         public int Size { get => size; }
         public int Uid { get => uid; }
 
-        public String getStringId { get => uid.ToString() + ":" + address.ToString(); }
-
         public Util.TYPEVAR GetTypeVar()
         {
             if (type < 2) return Util.TYPEVAR.BOOLEAN;
@@ -97,10 +95,10 @@ namespace inout
             return true;
         }
 
-        public bool CompareAsUshort(ref ushort[] buffer, ref ushort[] bufferValue)
+        public bool CompareAsUshort(ref ushort[] buffer, ref ushort[] bufferValue, int size)
         {
-             if (address + bufferValue.Length > buffer.Length) return false;
-            for (int i = 0; i < bufferValue.Length; i++)
+            if ( (address + size) > buffer.Length) return false;
+            for (int i = 0; i < size; i++)
             {
                 if (buffer[address + i] != bufferValue[i]) return false;
             }
@@ -193,7 +191,7 @@ namespace inout
 
             return resultBuilder.ToString();
         }
-        public ushort[] SetAsValue(string value)
+        public ushort[] ConvertToUshorts(string value)
         {
             if (type < 2) throw new ArgumentException("Большой адрес " + name);
             string[] result = value.Split(' ');
@@ -309,15 +307,20 @@ namespace inout
         }
     }
 
+    
     public class ModbusRegisterWithValue
     {
         public ModbusRegister register;
         public String Value;
+        public bool isNew;
+
 
         public ModbusRegisterWithValue(ModbusRegister register, string value)
         {
             this.register = register;
             this.Value = value;
+            this.isNew = true;
         }
     }
+    
 }
