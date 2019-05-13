@@ -40,7 +40,6 @@ namespace inout
         private long stepTime;
         private Thread drvThr;
 
-        //        private ConcurrentQueue<ModbusRegisterWithValue> inque;
         private ConcurrentDictionary<int, bool> activeRegisters;
              
         private DateTime lastOperation=DateTime.MinValue;
@@ -57,9 +56,7 @@ namespace inout
             ClassName = "FastSerialMasterModbus";
             lastOperation = DateTime.MinValue;
 
-            //            inque = new ConcurrentQueue<ModbusRegisterWithValue>();
             activeRegisters = new ConcurrentDictionary<int, bool>();
-
 
             hregs = new ConcurrentDictionary<int, ushort[]>();
             base.MakeAllArrays();
@@ -90,7 +87,6 @@ namespace inout
                 hregs[i] = new ushort[lenHrs];
             }
         }
-
 
         public override void Start()
         {
@@ -140,8 +136,6 @@ namespace inout
             long beginTime, endTime, cycleTime;
             while (Connect)
             {
-                //Log.Warn(ClassName, "Устройство " + name + ". Количество регистров " + registers.Count.ToString());
-
                 beginTime = DateTime.Now.Ticks;
 
                 if ( Connect ) {
@@ -170,28 +164,6 @@ namespace inout
                         }
                     }
                 }
-
-
-                /*
-
-                while (!inque.IsEmpty)
-                {
-                    ModbusRegisterWithValue mregv;
-
-                    if (Connect && inque.TryDequeue(out mregv))
-                    {
-                        try
-                        {
-                            Connect = sendMessage(mregv.register.Uid, mregv.register.Address,mregv.register.SetAsValue(mregv.Value)); 
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Warn(ClassName, "Устройство " + name + " " + ex.Message);
-                            Connect = false;
-                        }
-                    }
-                }
-                */
 
                 endTime = DateTime.Now.Ticks;
                 cycleTime = (endTime - beginTime) / 10000L;
@@ -271,7 +243,6 @@ namespace inout
                 return false;
             }
 
-//            bool NeedSend = false;
             try
             {
                 ushort[] r = reg.ConvertToUshorts(value);
@@ -283,7 +254,6 @@ namespace inout
                     if (!reg.CompareAsUshort(ref hhr, ref r, reg.Size ))
                     {
                         activeRegisters[reg.Uid] = true;
-//                        NeedSend = true;
                         for (int i = 0; i < r.Length; i++)
                         {
                             hhr[reg.Address + i] = r[i];
@@ -302,14 +272,7 @@ namespace inout
             {
                 return true;
             }
-            /*
-            if (NeedSend)
-            {
-                registers[reg.Uid] = value;
 
-                //inque.Enqueue(new ModbusRegisterWithValue(reg, value));
-            }
-            */
             return true;
         }
 

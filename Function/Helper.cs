@@ -18,24 +18,6 @@ namespace Function
             return int.Parse(result[0]);
         }
 
-        /*
-        static public double ReadAsDouble(string value)
-        {
-            string[] result = value.Split(delimiterChars);
-            if (result.Length == 1)
-            {
-                if (value.Contains("E"))
-                {
-                    return double.Parse(result[0]);
-                }
-                else
-                {
-                    return double.Parse(result[0] + ",0");
-                }
-            }
-            return double.Parse(result[0] + "," + result[1]);
-        }
-        */
         static public double ReadAsDouble(string value)
         {
             return double.Parse( value.Replace(',','.'), CultureInfo.InvariantCulture);
@@ -53,8 +35,7 @@ namespace Function
         {
             string[] str = value.Split(' ');
             bool[] result = new bool[str.Length];
-            for(int i = 0; i < str.Length; i++)
-            {
+            for(int i = 0; i < str.Length; i++) {
                 result[i] = bool.Parse(str[i]);
             }
             return result;
@@ -76,22 +57,12 @@ namespace Function
             ushort[] rez;
             byte[] rbyte;
             string sres;
-            if (infloat < 0f || infloat > 99999.0f) sres = "99999";
-            else
-            { //sres = infloat.ToString("0000.0");
-              //
-                while (true)
-                {
-                    /*
-                    if (infloat < 1000.0f) { sres = infloat.ToString("000.00"); break; }
-                    if (infloat < 10000.0f) { sres = infloat.ToString("0000.0"); break; }   // исправлено заполнение пробелами
-                    */
-                    if (infloat < 1000.0f) { sres = infloat.ToString("00.000"); break; }
-                    if (infloat < 10000.0f) { sres = infloat.ToString("000.00"); break; }   
-                    sres = infloat.ToString("00000");
-                    break;
-                }
-            }
+
+            if (infloat < 0f || infloat > 99999.0f) { sres = "99999"; }
+            else if (infloat < 1000.0f) { sres = infloat.ToString("00.000"); }
+            else if (infloat < 10000.0f) { sres = infloat.ToString("000.00"); }
+            else { sres = infloat.ToString("00000"); }
+
             rbyte = convertToDisplay(sres);
             rez = upak(rbyte, blink);
             return ArrayToString(rez);
@@ -115,19 +86,13 @@ namespace Function
             ushort[] rez;
             byte[] rbyte;
             string sres;
-            if (infloat < 0f || infloat > 99999.0f) sres = "99999";
-            else
-            { //sres = infloat.ToString("0000.0");
-              //
-                while (true)
-                {
-                    if (infloat < 10.0f) { sres = infloat.ToString("0.0000"); break; }
-                    if (infloat < 1000.0f) { sres = infloat.ToString("000.00"); break; }
-                    if (infloat < 10000.0f) { sres = infloat.ToString("0000.0"); break; }   // исправлено заполнение пробелами
-                    sres = infloat.ToString("00000");
-                    break;
-                }
-            }
+
+            if (infloat < 0f || infloat > 99999.0f) { sres = "99999"; }
+            else if (infloat < 10.0f) { sres = infloat.ToString("0.0000"); }
+            else if (infloat < 1000.0f) { sres = infloat.ToString("000.00"); }
+            else if (infloat < 10000.0f) { sres = infloat.ToString("0000.0"); }
+            else { sres = infloat.ToString("00000"); }
+
             rbyte = convertToDisplay(sres);
             rez = upak(rbyte, blink);
             return ArrayToString(rez);
@@ -153,17 +118,7 @@ namespace Function
 
                 default:
                     throw new Exception("Undefined length in outInteger");
-                    
-                    
-                    break;
-
-
             }
-            /*
-            if (len == 5) sres = inInt.ToString("00000");
-            if (len == 2) sres = inInt.ToString("00");
-            if (len == 1) sres = inInt.ToString("0");
-            */
             rbyte = convertToDisplay(sres);
             rez = upak(rbyte, blink);
             return ArrayToString(rez);
@@ -228,6 +183,5 @@ namespace Function
             }
             return rez;
         }
-
     }
 }
