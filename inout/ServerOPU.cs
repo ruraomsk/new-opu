@@ -48,6 +48,7 @@ namespace inout
                 drv.Start();
             }
         }
+
         public void StopAllDevices()
         {
             foreach (Driver drv in drvs.Values)
@@ -55,9 +56,6 @@ namespace inout
                 drv.Stop();
             }
         }
-
-//        private const string DEBUG_VAR = "L22_2L";
-        private const string DEBUG_VAR = "R0MW13IP1";
 
         public void PrintVarialble()
         {
@@ -79,11 +77,6 @@ namespace inout
             {
                 string[] nameVariable = var.GetName().Split(':');
 
-                if ( var.GetName().Contains("F7_2L") ) {
-                    int a = 0;
-                    a++;
-                }
-
                 if (nameVariable.Length == 1) continue;
 
                 if (!var.LoadFromDevice) continue;
@@ -104,15 +97,8 @@ namespace inout
         {
             foreach (Variable var in vars.Values)
             {
-                //if (!var.IsChanged()) continue;
                 string[] nameVariable = var.GetName().Split(':');
                 if (nameVariable.Length == 1) continue;
-
-                if (nameVariable[1].Contains(DEBUG_VAR) )
-                {
-                    int a = 0;
-                    a++;
-                }
 
                 if (!var.SaveToDevice) continue;
 
@@ -135,11 +121,6 @@ namespace inout
             Variable var;
             foreach (Blind blnd in blinds)
             {
-                if ( blnd.resultName.Contains(DEBUG_VAR) || blnd.resultName.Contains("F7_2L") ) {
-                    int a = 0;
-                    a++;
-                }
-
                 List<string> pars = new List<string>();
                 foreach (string str in blnd.paramNames)
                 {
@@ -265,13 +246,13 @@ namespace inout
 
         public List<Variable> ListAllVariables()
         {
-            //            List<Variable> result = new List<Variable>(vars.Values.Count);
             List<Variable> result;
             lock ( Helper.mainmutex ) {
                 result = vars.Values.ToList<Variable>();
             }
             return result;
         }
+
         public Dictionary<string, Driver> ListAllDevices()
         {
             return drvs;
