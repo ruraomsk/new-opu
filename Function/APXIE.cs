@@ -16,7 +16,7 @@ namespace Function
 
         public override string calculate(List<string> values)
         {
-            return "10";
+            return Helper.GetAPXIE().ToString();
         }
     }
 }

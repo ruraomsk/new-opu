@@ -9,7 +9,7 @@ namespace Function
         static public int live = 0;
         static readonly char[] delimiterChars = { '.', ',' };
 
-        static public bool blink=false;
+        static public bool blink = false;
         static public object mainmutex = new object();
 
         static public int ReadAsInt(string value)
@@ -20,7 +20,7 @@ namespace Function
 
         static public double ReadAsDouble(string value)
         {
-            return double.Parse( value.Replace(',','.'), CultureInfo.InvariantCulture);
+            return double.Parse(value.Replace(',', '.'), CultureInfo.InvariantCulture);
         }
 
         static public bool ReadAsBool(string value)
@@ -35,7 +35,7 @@ namespace Function
         {
             string[] str = value.Split(' ');
             bool[] result = new bool[str.Length];
-            for(int i = 0; i < str.Length; i++) {
+            for (int i = 0; i < str.Length; i++) {
                 result[i] = bool.Parse(str[i]);
             }
             return result;
@@ -81,7 +81,7 @@ namespace Function
             return builder.ToString();
         }
 
-        static public string outFloatLong (float infloat, bool blink)
+        static public string outFloatLong(float infloat, bool blink)
         {
             ushort[] rez;
             byte[] rbyte;
@@ -105,7 +105,7 @@ namespace Function
             byte[] rbyte;
             string sres = "0";
 
-            switch ( len ) {
+            switch (len) {
                 case 1:
                     sres = inInt.ToString("0");
                     break;
@@ -183,6 +183,81 @@ namespace Function
                 else rez[j - 1] = (byte)(rez[j - 1] | 0x40);
             }
             return rez;
+        }
+
+
+        //------- APAX Input/Output Errors  ------------------------------------
+        private static int MAX_SLOTS = 12;
+        private static int SLOT_OVERFLOW = 13;
+
+        private static bool isAPXIE = false;
+        private static bool isAPXOE = false;
+
+        private static bool[] slotsErrorsInput = null;
+        private static bool[] slotsErrorsOutput = null;
+
+        private static bool[] getBoolArrayWithFalse(int size) {
+            bool[] result = new bool[size];
+            for (int i = 0; i < size; i++) {
+                result[i] = false;
+            }
+            return result;
+        }
+
+        private static ushort GetSlotsErrorsSerialized(bool[] slotsErrors)
+        {
+            ushort countSlots = (ushort)((slotsErrors.Length <= MAX_SLOTS) ? slotsErrors.Length : SLOT_OVERFLOW);
+            ushort result = (ushort)(countSlots << MAX_SLOTS);
+
+            for (int i = 0; i < Math.Min(slotsErrors.Length, MAX_SLOTS); i++)
+            {
+                ushort bitError = (ushort)((slotsErrors[i] == true) ? 1 : 0);
+                bitError <<= i;
+                result |= bitError;
+            }
+            return result;
+        }
+
+        public static ushort GetAPXIE() {
+            ushort result = (ushort)0;
+            if ( isAPXIE ) {
+                result = GetSlotsErrorsSerialized(slotsErrorsInput);
+            }
+            return result;
+        }
+
+        public static ushort GetAPXOE() {
+            ushort result = 0;
+            if ( isAPXOE) {
+                result = GetSlotsErrorsSerialized( slotsErrorsOutput );
+            }
+            return result;
+        }
+
+        public static void InitAPXIE(int size) {
+            slotsErrorsInput = getBoolArrayWithFalse(size);
+            isAPXIE = false;
+        }
+
+        public static void InitAPXOE(int size)
+        {
+            slotsErrorsOutput = getBoolArrayWithFalse(size);
+            isAPXOE = false;
+        }
+
+        public static void SetSlotErrorInput(int slot) {
+            isAPXIE = true;
+            if ( slotsErrorsInput != null ) {
+                slotsErrorsInput[slot] = true;
+            }
+        }
+
+        public static void SetSlotErrorOutput(int slot)
+        {
+            isAPXOE = true;
+            if ( slotsErrorsOutput != null) {
+                slotsErrorsOutput[slot] = true;
+            }
         }
     }
 }

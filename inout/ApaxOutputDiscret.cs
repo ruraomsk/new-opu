@@ -27,14 +27,16 @@ namespace inout
             stepTime = step;
             Reconnect.AddDriver(name, this);
         }
+
         public override void Start()
         {
-
             Connect = base.Open("5046"); ;
+            Function.Helper.InitAPXOE(this.slots.Length);
             drvThr = new Thread(this.Run);
             drvThr.Start();
             Log.Info(ClassName, "Устройство " + name + " запущено.");
         }
+
         public override bool SetValue(string nameValue, string value)
         {
             ApaxRegister reg;
@@ -62,6 +64,7 @@ namespace inout
             return "Устройство " + name + ":" + description + " " + (IsConnected() ? "запущено." : "остановлено.")
                     + "Последняя операция " + lastOperation.ToLongTimeString();
         }
+
         override public void Run()
         {
             while (Connect)
@@ -73,16 +76,18 @@ namespace inout
                 }
                 int index = 0;
                 bool[] value = new bool[Util.MaxChanal];
-                foreach (int slot in slots)
+                for (int i=0; i < slots.Length; i++) 
                 {
                     Array.Copy(buffer, index, value, 0, value.Length);
                     index += value.Length;
-                    if (!adamCtrl.DigitalOutput().SetValues(slot, value))
+                    if (!adamCtrl.DigitalOutput().SetValues(slots[i], value))
                     {
-                        Log.Error(ClassName, "Слот " + slot.ToString() + ". Ошибка вывода");
+                        Log.Error(ClassName, "Слот " + slots[i].ToString() + ". Ошибка вывода");
+                        Function.Helper.SetSlotErrorOutput(i);
                         continue;
                     }
                 }
+
                 lastOperation = DateTime.Now;
                 long untilTime = (lastOperation.Ticks - tm.Ticks) / 10000L;
                 if ((stepTime - untilTime) < 0)
@@ -102,9 +107,9 @@ namespace inout
                         Connect = false;
                     }
                 }
-
             }
         }
+
         public override string[] ColumnsName()
         {
             ApaxRegister[] regs = new ApaxRegister[regsApax.Count];

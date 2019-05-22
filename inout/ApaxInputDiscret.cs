@@ -24,18 +24,21 @@ namespace inout
             stepTime = step;
             Reconnect.AddDriver(name, this);
         }
+
         public override void Start()
         {
-
-            Connect = base.Open("5040"); ;
+            Connect = base.Open("5040");
+            Function.Helper.InitAPXIE(slots.Length);
             drvThr = new Thread(this.Run);
             drvThr.Start();
             Log.Info(ClassName, "Устройство " + name + " запущено.");
         }
+
         public override bool SetValue(string nameValue, string value)
         {
             return false;
         }
+
         public override void Stop()
         {
             Connect = false;
@@ -49,18 +52,20 @@ namespace inout
             return "Устройство " + name + ":" + description + " " + (IsConnected() ? "запущено." : "остановлено.")
                     + "Последняя операция " + lastOperation.ToLongTimeString();
         }
+
         override public void Run()
         {
             while (Connect)
             {
                 DateTime tm = DateTime.Now;
                 int index = 0;
-                foreach (int slot in slots)
+                for (int i= 0; i < slots.Length; i++)
                 {
                     bool[] value;
-                    if(!adamCtrl.DigitalInput().GetValues(slot,Util.MaxChanal,out value))
+                    if(!adamCtrl.DigitalInput().GetValues(slots[i],Util.MaxChanal,out value))
                     {
-                        Log.Error(ClassName, "Слот " + slot.ToString() + ". Ошибка ввода");
+                        Log.Error(ClassName, "Слот " + slots[i].ToString() + ". Ошибка ввода");
+                        Function.Helper.SetSlotErrorInput(i);
                         continue;
                     }
                     Array.Copy(value, 0,buffer, index, value.Length);
@@ -84,12 +89,10 @@ namespace inout
                     }
                     catch (Exception ex)
                     {
-
                         Log.Warn(ClassName, "Устройство " + name + " Выполнение прервано..." + ex.Message);
                         Connect = false;
                     }
                 }
-
             }
         }
 
