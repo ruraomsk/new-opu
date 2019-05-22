@@ -43,6 +43,8 @@
   <ItemGroup>
     <Compile Include="ADD.cs" />
     <Compile Include="AND.cs" />
+    <Compile Include="APXIE.cs" />
+    <Compile Include="APXOE.cs" />
     <Compile Include="BLINK.cs" />
     <Compile Include="BLINKS.cs" />
     <Compile Include="BLK.cs" />

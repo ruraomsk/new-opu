@@ -39,6 +39,9 @@ namespace Function
             new LIVE(),
             new STATUS(),
             new KEY(),
+
+            new APXIE(),
+            new APXOE(),
             //new Mul(),
             new FloatLong(),
 
