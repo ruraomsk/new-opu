@@ -57,13 +57,12 @@ namespace inout
             }
         }
 
-        public void PrintVarialble()
+        public void PrintVarialble(string path)
         {
             List<Variable> listVars = vars.Values.ToList();
 
             listVars.Sort((var1, var2) => var1.GetName().CompareTo(var2.GetName()));
 
-            string path = @"c:\newOPU\var.txt";
             StreamWriter file = new StreamWriter(path, true);
             foreach (Variable current in listVars) {
                 file.WriteLine(current.GetName());

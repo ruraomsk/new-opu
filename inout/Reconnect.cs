@@ -23,7 +23,6 @@ namespace inout
             drvThr = new Thread(Run);
             drvThr.Start();
             Log.Info(ClassName, "Процесс " + name + " запущен.");
-
         }
 
         public static void Stop()
@@ -64,7 +63,6 @@ namespace inout
                     }
                     catch (Exception ex)
                     {
-
                         Log.Warn(ClassName, "Процесс " + name + " Выполнение прервано..." + ex.Message);
                         Connect = false;
                     }
