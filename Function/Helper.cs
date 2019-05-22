@@ -81,7 +81,7 @@ namespace Function
             return builder.ToString();
         }
 
-        static public string outFloatLong(float infloat, bool blink)
+        static public string outFloatLong (float infloat, bool blink)
         {
             ushort[] rez;
             byte[] rbyte;
@@ -89,6 +89,7 @@ namespace Function
 
             if (infloat < 0f || infloat > 99999.0f) { sres = "99999"; }
             else if (infloat < 10.0f) { sres = infloat.ToString("0.0000"); }
+            else if (infloat < 100.0f) { sres = infloat.ToString("00.000"); }
             else if (infloat < 1000.0f) { sres = infloat.ToString("000.00"); }
             else if (infloat < 10000.0f) { sres = infloat.ToString("0000.0"); }
             else { sres = infloat.ToString("00000"); }
