@@ -53,7 +53,7 @@ namespace OPU
             Thread.Sleep(5000);
             Console.WriteLine("Server {0} as {1} started...",server.getName() , server.descriptions);
 
-//            server.PrintVarialble();
+            //            server.PrintVarialble(@"c:\newOPU\var.txt");
 
             bool Connect = true;
             while (Connect)

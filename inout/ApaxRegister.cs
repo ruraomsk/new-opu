@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Function;
+
 namespace inout
 {
     public class ApaxRegister : ViewTable
@@ -13,6 +11,7 @@ namespace inout
         private int slot;
         private int address;
         private int size;
+
         public ApaxRegister(string name, string description, int slot, int address, int size)
         {
             this.name = name;
@@ -21,6 +20,7 @@ namespace inout
             this.address = address;
             this.size = size;
         }
+
         public Util.TYPEVAR GetTypeVar()
         {
             return Util.TYPEVAR.BOOLEAN;
@@ -38,6 +38,7 @@ namespace inout
             }
             return builder.ToString();
         }
+
         public void SetAsBool(ref bool[] vs,string value)
         {
             string[] b = value.Split(' ');
@@ -74,6 +75,7 @@ namespace inout
             return 1;
         }
     }
+
     public class ApaxRegisterWithValue
     {
         public ApaxRegister register;

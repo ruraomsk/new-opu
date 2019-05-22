@@ -16,8 +16,6 @@ namespace Function
 
         public override string calculate(List<string> values)
         {
-
-            //string result = Helper.outInteger(Helper.ReadAsInt(values[0]), Helper.ReadAsInt(values[0]), Helper.ReadAsBool(values[1]));
             string result = Helper.outInteger(Helper.ReadAsInt(values[0]), Helper.ReadAsInt(values[1]), Helper.ReadAsBool(values[2]));
             return result;
         }

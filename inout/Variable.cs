@@ -19,7 +19,6 @@ namespace inout
         public bool LoadFromDevice = false;
         public bool SaveToDevice = false;
 
-
         public Variable(string Name, string Description, Util.TYPEVAR TypeVar, int size=1)
         {
             this.Name = Name;

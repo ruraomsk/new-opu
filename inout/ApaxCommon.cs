@@ -35,7 +35,7 @@ namespace inout
             MakeAllArrays();
 
             /*
-                         this.name = name;
+            this.name = name;
             this.description = description;
             this.regsApax = regsApax;
             lastOperation = DateTime.MinValue;
@@ -88,7 +88,9 @@ namespace inout
                     Log.Error("ApaxDeriverOpen", "Нет устройств " + nameDevice + " на шине APAX");
                     return false;
                 }
+
                 slots = new int[count];
+
                 count = 0;
                 for (int i = 0; i < nameDevices.Length; i++)
                 {
@@ -105,20 +107,24 @@ namespace inout
                 return false;
             }
         }
+
         public override Util.TYPEVAR GetTypeVar(string nameValue)
         {
             ApaxRegister reg;
             if (!TryGetValue(nameValue, out reg)) return Util.TYPEVAR.BOOLEAN;
             return reg.GetTypeVar();
         }
+
         internal bool TryGetValue(string nameValue, out ApaxRegister reg)
         {
             return regsApax.TryGetValue(nameValue, out reg);
         }
+
         public override bool IsHaveVariable(string nameValue)
         {
             return regsApax.ContainsKey(nameValue);
         }
+
         public override string GetValue(string nameValue)
         {
             ApaxRegister reg;
