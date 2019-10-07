@@ -23,15 +23,19 @@ namespace OPU
             string dir = (args.Length < 2) ? PathHelper.getDefaultPath() : args[1];
 
             Console.Write("Loading from " + dir + file + " ");
-
+            // Создаем сервер
             ServerOPU server = XMLServer.Load(dir, file);
             Console.Write(".");
+            // Установливаем время переподключения
             Reconnect.StartReconnect(server.stepReconnect);
             Console.Write(".");
+            // Грузим описания всех устройств
             XMLDevices.Load(dir, file, server);
             Console.Write(".");
+            // Грузим описания всех переменных
             XMLVariables.Load(dir, file, server);
             Console.Write(".");
+            // Грузим все привязки
             XMLBlinds.Load(dir, file, server);
             Console.Write(".");
 
@@ -40,12 +44,12 @@ namespace OPU
                 Console.Write("\nЕсть ошибки при загрузке функций!\nПрограмма завершена аварийна");
                 return;
             }
-
+            // Подключаем слушателя запросов на чтение переменных 
             AgServer agserv = new AgServer(server, 8081);
             agserv.Start();
 
             Console.Write(".");
-
+            // Запускаем все загруженные и проинициализированные устройства
             server.StartAllDevices();
             Console.Write(".");
             Console.WriteLine("\nAll done.");
@@ -56,6 +60,9 @@ namespace OPU
             //            server.PrintVarialble(@"c:\newOPU\var.txt");
 
             bool Connect = true;
+            // все основном цикле считываем все значения с устройств в переменные 
+            // делаем один расчет
+            // и затем все результаты записываем в устройства
             while (Connect)
             {
                 DateTime tm = DateTime.Now;
